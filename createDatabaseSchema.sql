@@ -3,7 +3,7 @@
 --
 CREATE TABLE courseLevel (
 	id tinyint PRIMARY KEY,
-	difficulty varchar(12)
+	difficulty varchar(12) NOT NULL
 );
 
 INSERT INTO courseLevel
@@ -15,7 +15,7 @@ VALUES
 
 CREATE TABLE contentStatus (
 	id tinyint PRIMARY KEY,
-	named varchar(7)
+	named varchar(7) NOT NULL
 );
 
 INSERT INTO contentStatus

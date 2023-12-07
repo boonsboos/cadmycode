@@ -60,7 +60,7 @@ CREATE TABLE Content (
 );
 
 CREATE TABLE Module (
-	contentItemID int NOT NULL,
+	contentItemID int PRIMARY KEY,
 	contactName nvarchar(100) NOT NULL,
 	contactEmail varchar(320) NOT NULL,
 	courseID int NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE Module (
 );
 
 CREATE TABLE Webcast (
-	contentItemID int NOT NULL,
+	contentItemID int PRIMARY KEY,
 	contentLength int NOT NULL,
 	webAddress varchar(2048) NOT NULL,
 	organisation nvarchar(130) NOT NULL,

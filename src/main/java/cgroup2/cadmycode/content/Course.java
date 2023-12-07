@@ -10,13 +10,12 @@ public class Course {
     private CourseLevel level;
     private ArrayList<Course> relatedCourses;
 
-    public Course(String courseName, String subject, String introductionText, int courseID, CourseLevel level, ArrayList<Course> relatedCourses) {
+    public Course(String courseName, String subject, String introductionText, int courseID, CourseLevel level) {
         this.courseName = courseName;
         this.subject = subject;
         this.introductionText = introductionText;
         this.courseID = courseID;
         this.level = level;
-        this.relatedCourses = relatedCourses;
     }
 
     public String getCourseName() {

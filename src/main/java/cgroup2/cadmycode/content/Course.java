@@ -8,7 +8,7 @@ public class Course {
     private String introductionText;
     private int courseID;
     private CourseLevel level;
-    private ArrayList<Course> relatedCourses;
+    private ArrayList<Course> relatedCourses = new ArrayList<>();
 
     public Course(String courseName, String subject, String introductionText, int courseID, CourseLevel level) {
         this.courseName = courseName;

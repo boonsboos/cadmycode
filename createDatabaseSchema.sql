@@ -98,13 +98,12 @@ CREATE TABLE CMCUser (
 );
 
 CREATE TABLE Enrollment (
-	enrollmentID int IDENTITY(1,1) PRIMARY KEY,
 	userID int NOT NULL,
 	courseID int NOT NULL,
-	enrollmentTime datetime NOT NULL CONSTRAINT DF_Enrollment_enrollmentTime DEFAULT GETDATE(),
+	enrollmentTime datetime PRIMARY KEY CONSTRAINT DF_Enrollment_enrollmentTime DEFAULT GETDATE(),
 
-	CONSTRAINT FK_Enrollment_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID),
-	CONSTRAINT FK_Enrollment_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
+	CONSTRAINT FK_Enrollment_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID) ON DELETE CASCADE,
+	CONSTRAINT FK_Enrollment_Course FOREIGN KEY (courseID) REFERENCES Course(courseID) ON DELETE NO ACTION,
 	CONSTRAINT UQ_Enrollment UNIQUE(userID, courseID, enrollmentTIme)
 );
 
@@ -122,7 +121,7 @@ CREATE TABLE Graduation (
 	grade tinyint NOT NULL,
 
 	CONSTRAINT UQ_Graduation_userID_certificateID UNIQUE(userID, certificateID),
-	CONSTRAINT FK_Graduation_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID),
+	CONSTRAINT FK_Graduation_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID) ON DELETE CASCADE,
 	CONSTRAINT FK_Graduation_CMCCertificate FOREIGN KEY (certificateID) REFERENCES CMCCertificate(certificateID),
 	CONSTRAINT CH_Graduation_grade CHECK(grade <= 10 AND grade >= 1)
 );

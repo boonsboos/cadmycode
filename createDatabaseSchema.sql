@@ -44,9 +44,11 @@ CREATE TABLE Course (
     subj nvarchar(50) NOT NULL,
     introductionText nvarchar(280),
     courseLevel tinyint NOT NULL,
+    certificateID int NOT NULL,
 
 	CONSTRAINT FK_Course_courseLevel FOREIGN KEY (courseLevel) REFERENCES courseLevel(id),
-	CONSTRAINT UQ_Course_courseName UNIQUE(courseName)
+	CONSTRAINT UQ_Course_courseName UNIQUE(courseName),
+	CONSTRAINT FK_Course_CMCCertificate FOREIGN KEY (certificateID) REFERENCES CMCCertificate(certificateID),
 );
 
 CREATE TABLE Content (

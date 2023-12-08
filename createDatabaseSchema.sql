@@ -134,4 +134,5 @@ CREATE TABLE ViewedItems (
 
 	CONSTRAINT FK_ViewedItems_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID),
 	CONSTRAINT FK_ViewedItems_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID),
+	CONSTRAINT UQ_ViewedItems_contentItemID_userID UNIQUE(contentItemID, userID),
 )

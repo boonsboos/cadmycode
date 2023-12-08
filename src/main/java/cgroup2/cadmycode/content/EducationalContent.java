@@ -26,6 +26,20 @@ public abstract class EducationalContent {
         this.version = version;
     }
 
+    EducationalContent(int contentItemID,
+                       String title,
+                       String description,
+                       LocalDate publicationDate,
+                       ContentStatus status
+    ) {
+        this.contentItemID = contentItemID;
+        this.title = title;
+        this.description = description;
+        this.publicationDate = publicationDate;
+        this.status = status;
+        this.version = 0; // webcast
+    }
+
     EducationalContent(String title, String description, LocalDate publicationDate, ContentStatus status, int version) {
         this.contentItemID = 0;
         // IMPORTANT: make sure to always do a 0 check on contentItemID when inserting anything

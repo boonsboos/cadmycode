@@ -14,9 +14,10 @@ public class Module extends EducationalContent {
                   ContentStatus status,
                   String contactName,
                   String contactEmail,
-                  int courseID
+                  int courseID,
+                  int version
     ) {
-        super(contentItemID, title, description, publicationDate, status);
+        super(contentItemID, title, description, publicationDate, status, version);
         this.contactName = contactName;
         this.contactEmail = contactEmail;
         this.courseID = courseID;

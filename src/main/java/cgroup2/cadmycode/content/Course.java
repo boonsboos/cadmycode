@@ -9,13 +9,22 @@ public class Course {
     private int courseID;
     private CourseLevel level;
     private ArrayList<Course> relatedCourses = new ArrayList<>();
+    private int certificateID;
 
-    public Course(String courseName, String subject, String introductionText, int courseID, CourseLevel level) {
+    public Course(
+            String courseName,
+            String subject,
+            String introductionText,
+            int courseID,
+            CourseLevel level,
+            int certificateID
+    ) {
         this.courseName = courseName;
         this.subject = subject;
         this.introductionText = introductionText;
         this.courseID = courseID;
         this.level = level;
+        this.certificateID = certificateID;
     }
 
     public String getCourseName() {
@@ -36,6 +45,10 @@ public class Course {
 
     public CourseLevel getLevel() {
         return level;
+    }
+
+    public int getCertificateID() {
+        return certificateID;
     }
 
     public ArrayList<Course> getRelatedCourses() {

@@ -38,6 +38,13 @@ VALUES
 --
 -- entities
 --
+CREATE TABLE CMCCertificate (
+	certificateID int IDENTITY(1,1) PRIMARY KEY,
+	certificateName nvarchar(100),
+
+	CONSTRAINT UQ_CMCCertificate_certificateName UNIQUE (certificateName)
+);
+
 CREATE TABLE Course (
     courseID int IDENTITY(1,1) PRIMARY KEY,
     courseName nvarchar(150) NOT NULL,
@@ -107,13 +114,6 @@ CREATE TABLE Enrollment (
 	CONSTRAINT FK_Enrollment_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID) ON DELETE CASCADE,
 	CONSTRAINT FK_Enrollment_Course FOREIGN KEY (courseID) REFERENCES Course(courseID) ON DELETE NO ACTION,
 	CONSTRAINT UQ_Enrollment UNIQUE(userID, courseID, enrollmentTIme)
-);
-
-CREATE TABLE CMCCertificate (
-	certificateID int IDENTITY(1,1) PRIMARY KEY,
-	certificateName nvarchar(100),
-
-	CONSTRAINT UQ_CMCCertificate_certificateName UNIQUE (certificateName)
 );
 
 CREATE TABLE Graduation (

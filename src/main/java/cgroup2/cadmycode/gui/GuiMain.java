@@ -28,30 +28,19 @@ public class GuiMain extends Application {
         Button edit = new Button("edit");
         Button delete = new Button("delete");
         TableView<Webcast> webcastTable = new TableView<>();
-//        TableColumn atribuutContentItemId = new TableColumn<Webcast, Integer>("contentItemId");
-//        TableColumn atribuutTitle = new TableColumn<Webcast, String>("title");
-//        TableColumn atribuutDescription = new TableColumn<Webcast, String>("description");
-//        TableColumn atribuutPublicationDate = new TableColumn<Webcast, LocalDate>("publicationDate");
-//        TableColumn atribuutStatus = new TableColumn<Webcast, ContentStatus>("status");
+        TableColumn atribuutContentItemId = new TableColumn<Webcast, Integer>("contentItemId");
         TableColumn atribuutLenth = new TableColumn<Webcast, Integer>("length");
         TableColumn atribuutURL = new TableColumn<Webcast, String>("URL");
         TableColumn atribuutSpeaker = new TableColumn<Webcast, String>("speaker");
         TableColumn atribuutOrganisation = new TableColumn<Webcast, String>("organisation");
 
-//        atribuutContentItemId.setCellFactory(new PropertyValueFactory<Webcast, Integer>("contentItemId"));
-//        atribuutTitle.setCellFactory(new PropertyValueFactory<Webcast, String>("title"));
-//        atribuutDescription.setCellFactory(new PropertyValueFactory<Webcast, String>("description"));
-//        atribuutPublicationDate.setCellFactory(new PropertyValueFactory<Webcast, LocalDate>("publicationDate"));
-//        atribuutStatus.setCellFactory(new PropertyValueFactory<Webcast, ContentStatus>("status"));
+
+        atribuutContentItemId.setCellFactory(new PropertyValueFactory<Webcast, Integer>("contentItemId"));
         atribuutLenth.setCellFactory(new PropertyValueFactory<Webcast, Integer>("length"));
         atribuutURL.setCellFactory(new PropertyValueFactory<Webcast, String>("URL"));
         atribuutSpeaker.setCellFactory(new PropertyValueFactory<Webcast, String>("speaker"));
         atribuutOrganisation.setCellFactory(new PropertyValueFactory<Webcast, String>("organisation"));
-
-        webcastTable.getColumns().add(atribuutLenth);
-        webcastTable.getColumns().add(atribuutURL);
-        webcastTable.getColumns().add(atribuutSpeaker);
-        webcastTable.getColumns().add(atribuutOrganisation);
+        webcastTable.getColumns().addAll(atribuutContentItemId, atribuutLenth, atribuutURL, atribuutSpeaker, atribuutOrganisation);
 
         VBox vBox = new VBox(create, edit, delete);
 

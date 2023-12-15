@@ -23,32 +23,7 @@ public class GuiMain extends Application {
         stage.setTitle("Cadmycode");
         stage.show();
 
-        Button home = new Button("home");
-        Button create = new Button("+");
-        Button edit = new Button("edit");
-        Button delete = new Button("delete");
-        TableView<Webcast> webcastTable = new TableView<>();
-        TableColumn atribuutContentItemId = new TableColumn<Webcast, Integer>("contentItemId");
-        TableColumn atribuutLenth = new TableColumn<Webcast, Integer>("length");
-        TableColumn atribuutURL = new TableColumn<Webcast, String>("URL");
-        TableColumn atribuutSpeaker = new TableColumn<Webcast, String>("speaker");
-        TableColumn atribuutOrganisation = new TableColumn<Webcast, String>("organisation");
-
-
-        atribuutContentItemId.setCellFactory(new PropertyValueFactory<Webcast, Integer>("contentItemId"));
-        atribuutLenth.setCellFactory(new PropertyValueFactory<Webcast, Integer>("length"));
-        atribuutURL.setCellFactory(new PropertyValueFactory<Webcast, String>("URL"));
-        atribuutSpeaker.setCellFactory(new PropertyValueFactory<Webcast, String>("speaker"));
-        atribuutOrganisation.setCellFactory(new PropertyValueFactory<Webcast, String>("organisation"));
-        webcastTable.getColumns().addAll(atribuutContentItemId, atribuutLenth, atribuutURL, atribuutSpeaker, atribuutOrganisation);
-
-        VBox vBox = new VBox(create, edit, delete);
-
-        HBox hBox = new HBox(home,webcastTable, vBox);
-
-        Scene mainScene = new Scene(hBox);
-
-        stage.setScene(mainScene);
+        new WebcastScene(stage);
     }
 
     @Override

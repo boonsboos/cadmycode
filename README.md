@@ -7,3 +7,7 @@ programming 2 group assignment
 create a database in SSMS called `dev_codecademy`
 
 open the `createDatabaseSchema.sql` file in SSMS and execute it on that database
+
+compile the program with `./mvnw install`
+
+now run it with `java -jar ./target/cadmycode-1.0-SNAPSHOT.jar {your-database-password-here}`

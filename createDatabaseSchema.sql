@@ -69,7 +69,7 @@ CREATE TABLE Content (
 	CONSTRAINT FK_Content_contentStatus FOREIGN KEY (contentStatus) REFERENCES contentStatus(id),
 	CONSTRAINT CK_Content_contentItemIDValid CHECK(contentItemID > 0),
 	CONSTRAINT UQ_Content_title_version UNIQUE(title, contentVersion),
-	CONSTRAINT CK_Content_version_gt_zero CHECK(contentVersion > 0),
+	CONSTRAINT CK_Content_version_gteq_zero CHECK(contentVersion >= 0),
 );
 
 CREATE TABLE Module (
@@ -79,7 +79,8 @@ CREATE TABLE Module (
 	courseID int NOT NULL,
 
 	CONSTRAINT FK_Module_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
-	CONSTRAINT FK_Module_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID)
+	CONSTRAINT FK_Module_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID),
+	CONSTRAINT CK_Module_id_not_in_Webcast CHECK(contentItemID NOT IN (SELECT contentItemID FROM Webcast)),
 );
 
 CREATE TABLE Webcast (
@@ -89,7 +90,8 @@ CREATE TABLE Webcast (
 	organisation nvarchar(130) NOT NULL,
 	speaker nvarchar(100) NOT NULL,
 
-	CONSTRAINT FK_Webcast_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID)
+	CONSTRAINT FK_Webcast_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID) ON DELETE CASCADE,
+	CONSTRAINT CK_Webcast_id_not_in_Module CHECK(contentItemID NOT IN (SELECT contentItemID FROM Module)),
 );
 
 CREATE TABLE CMCUser (
@@ -117,7 +119,8 @@ CREATE TABLE Enrollment (
 );
 
 CREATE TABLE Graduation (
-	userID int PRIMARY KEY,
+    graduationID int IDENTITY(1,1) PRIMARY KEY,
+	userID int NOT NULL,
 	certificateID int NOT NULL,
 	grantedBy nvarchar(100) NOT NULL,
 	grade tinyint NOT NULL,

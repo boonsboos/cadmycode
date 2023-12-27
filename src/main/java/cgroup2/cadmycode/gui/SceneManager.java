@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui;
 
+import cgroup2.cadmycode.gui.module.ModuleScene;
 import cgroup2.cadmycode.gui.webcast.WebcastScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -17,7 +18,7 @@ public class SceneManager {
     /**
      * This is the scene that is shown when the application is started
      */
-    private final SceneType splash = SceneType.DASHBOARD;
+    private final SceneType splash = SceneType.MODULE;
 
     private HashMap<SceneType, SceneWrapper> scenes;
     private Stage mainStage;
@@ -28,6 +29,7 @@ public class SceneManager {
 
         this.scenes = new HashMap<>(Map.ofEntries(
                 Map.entry(SceneType.WEBCAST, new WebcastScene(mainStage)),
+                Map.entry(SceneType.MODULE, new ModuleScene(mainStage)),
                 Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage))
         ));
 

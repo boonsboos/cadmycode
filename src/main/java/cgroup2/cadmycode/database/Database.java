@@ -1,6 +1,7 @@
 package cgroup2.cadmycode.database;
 
 import cgroup2.cadmycode.content.ContentStatus;
+import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.gui.SceneManager;
 
@@ -140,11 +141,52 @@ public class Database {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            // show error message
+            SceneManager.showErrorDialog(e.getMessage());
         }
 
         return list;
+    }
+    public static ArrayList<Module> getModules(int offset) {
+
+        ArrayList<Module> list = new ArrayList<>();
+
+        try {
+            PreparedStatement selectModules = databaseConnection.prepareStatement(
+                    "SELECT *\n"+
+                            "FROM Module\n"+
+                            "JOIN Content ON Module.contentItemID = Content.contentItemID\n"+
+                            "ORDER BY Content.contentItemID ASC\n"+
+                            "OFFSET ? ROWS\n"+
+                            "FETCH NEXT 15 ROWS ONLY;"
+            );
+
+            selectModules.setInt(1, offset);
+
+            ResultSet rs = selectModules.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Module(
+                        rs.getInt("contentItemID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getDate("publicationDate").toLocalDate(),
+                        ContentStatus.fromInt(rs.getInt("contentStatus")),
+                        rs.getString("contactName"),
+                        rs.getString("contactEmail"),
+                        rs.getInt("courseID"),
+                        rs.getInt("version")
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
+    }
+
+    public static ArrayList<Module> getModules() {
+        return getModules(0);
     }
 
     public static void deleteWebcastById(int id) {

@@ -7,6 +7,7 @@ public abstract class SceneWrapper {
 
     protected Stage stage;
     protected Scene scene;
+
     public SceneWrapper(Stage stage) {
         this.stage = stage;
     }

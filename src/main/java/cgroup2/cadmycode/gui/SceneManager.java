@@ -31,6 +31,7 @@ public class SceneManager {
                 Map.entry(SceneType.WEBCAST, new WebcastScene(mainStage)),
                 Map.entry(SceneType.MODULE, new ModuleScene(mainStage)),
                 Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage))
+                Map.entry(SceneType.ABOUT, new AboutScene(mainStage))
         ));
 
         this.scenes.get(splash).show();

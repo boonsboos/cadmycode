@@ -2,10 +2,12 @@ package cgroup2.cadmycode.gui.webcast;
 
 import cgroup2.cadmycode.content.ContentStatus;
 import cgroup2.cadmycode.database.Database;
+import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.gui.SceneWrapper;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -36,6 +38,7 @@ public class WebcastCreationForm extends SceneWrapper {
     TextField speaker = new TextField();
 
     Button submit = new Button("Submit");
+
 
     public WebcastCreationForm(Stage stage) {
         super(stage);
@@ -90,6 +93,8 @@ public class WebcastCreationForm extends SceneWrapper {
         }
 
         stage.close();
+        // refresh table
+        ((WebcastScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
     }
 
 }

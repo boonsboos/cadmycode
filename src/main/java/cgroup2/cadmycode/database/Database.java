@@ -45,6 +45,14 @@ public class Database {
         return -1;
     }
 
+    private static Date convertLocalDateToSQLDate(LocalDate local) {
+        return new Date(
+                local.getYear() - 1900,
+                local.getMonthValue() - 1,
+                local.getDayOfMonth()
+        );
+    }
+
     public static void createNewWebcast(
             String title,
             String description,
@@ -184,11 +192,7 @@ public class Database {
 
             updateContent.setString(1, w.getTitle());
             updateContent.setString(2, w.getDescription());
-            updateContent.setDate(3, new Date(
-                    w.getPublicationDate().getYear() - 1900,
-                    w.getPublicationDate().getMonthValue()-1,
-                    w.getPublicationDate().getDayOfMonth()
-            ));
+            updateContent.setDate(3, convertLocalDateToSQLDate(w.getPublicationDate()));
             updateContent.setInt(4, ContentStatus.asInt(w.getStatus()));
             updateContent.setInt(5, id);
 

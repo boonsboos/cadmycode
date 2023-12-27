@@ -76,11 +76,10 @@ CREATE TABLE Module (
 	contentItemID int PRIMARY KEY,
 	contactName nvarchar(100) NOT NULL,
 	contactEmail varchar(320) NOT NULL,
-	courseID int NOT NULL,
+	courseID int,
 
 	CONSTRAINT FK_Module_Course FOREIGN KEY (courseID) REFERENCES Course(courseID),
 	CONSTRAINT FK_Module_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID),
-	CONSTRAINT CK_Module_id_not_in_Webcast CHECK(contentItemID NOT IN (SELECT contentItemID FROM Webcast)),
 );
 
 CREATE TABLE Webcast (

@@ -7,12 +7,15 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class GuiMain extends Application {
+
+    public static SceneManager SCENE_MANAGER;
+
     @Override
     public void start(Stage stage) {
         stage.setTitle("Cadmycode");
         stage.show();
 
-        new WebcastScene(stage);
+        SCENE_MANAGER = new SceneManager(stage);
     }
 
     @Override

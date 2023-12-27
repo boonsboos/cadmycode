@@ -67,8 +67,7 @@ public class WebcastCreationForm extends SceneWrapper {
 
         submit.setOnMouseClicked(this::onSubmit);
 
-        Scene dialogScene = new Scene(v);
-        stage.setScene(dialogScene);
+        this.scene = new Scene(v);
     }
 
     private void onSubmit(Event event) {

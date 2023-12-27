@@ -1,8 +1,12 @@
-package cgroup2.cadmycode.gui;
+package cgroup2.cadmycode.gui.webcast;
 
 import cgroup2.cadmycode.content.ContentStatus;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
+import cgroup2.cadmycode.gui.GuiMain;
+import cgroup2.cadmycode.gui.SceneManager;
+import cgroup2.cadmycode.gui.SceneType;
+import cgroup2.cadmycode.gui.SceneWrapper;
 import cgroup2.cadmycode.gui.webcast.WebcastCreationForm;
 import cgroup2.cadmycode.gui.webcast.WebcastDeletionPopup;
 import cgroup2.cadmycode.gui.webcast.WebcastEditForm;
@@ -75,11 +79,12 @@ public class WebcastScene extends SceneWrapper {
         refresh.setOnMouseClicked(this::loadData);
         edit.setOnMouseClicked(this::onEditButtonPressed);
         delete.setOnMouseClicked(this::onDeleteButtonPressed);
+        home.setOnMouseClicked(this::onHomeButtonPressed);
 
         // serialize all the database items and add them to the UI
         loadData(new Event(EventType.ROOT));
 
-        stage.setScene(new Scene(hBox));
+        this.scene = new Scene(hBox);
     }
 
     public void loadData(Event e) {
@@ -94,7 +99,7 @@ public class WebcastScene extends SceneWrapper {
         dialog.initOwner(stage);
 
         // shows the webcast form
-        new WebcastCreationForm(dialog);
+        new WebcastCreationForm(dialog).show();
 
         dialog.show();
     }
@@ -108,13 +113,12 @@ public class WebcastScene extends SceneWrapper {
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(stage);
 
-        new WebcastEditForm(dialog, webcastTable.getSelectionModel().getSelectedItem());
+        new WebcastEditForm(dialog, webcastTable.getSelectionModel().getSelectedItem()).show();
 
         dialog.show();
     }
 
     private void onDeleteButtonPressed(Event e) {
-
         if (webcastTable.getSelectionModel().getSelectedItem() == null) {
             return;
         }
@@ -124,8 +128,12 @@ public class WebcastScene extends SceneWrapper {
         dialog.initOwner(stage);
 
         // shows the deletion popup
-        new WebcastDeletionPopup(dialog, webcastTable.getSelectionModel().getSelectedItem());
+        new WebcastDeletionPopup(dialog, webcastTable.getSelectionModel().getSelectedItem()).show();
 
         dialog.show();
+    }
+
+    private void onHomeButtonPressed(Event e) {
+        GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);
     }
 }

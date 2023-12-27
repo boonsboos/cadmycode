@@ -3,7 +3,6 @@ package cgroup2.cadmycode.gui.webcast;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.SceneWrapper;
-import cgroup2.cadmycode.gui.WebcastScene;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -44,8 +43,7 @@ public class WebcastDeletionPopup extends SceneWrapper {
         yesButton.setOnMouseClicked(this::onYesPressed);
         noButton.setOnMouseClicked(this::onNoPressed);
 
-        Scene dialogScene = new Scene(v);
-        stage.setScene(dialogScene);
+        this.scene = new Scene(v);
     }
 
     private void onYesPressed(Event e) {

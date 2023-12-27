@@ -28,7 +28,8 @@ public class SceneManager {
 
         this.scenes = new HashMap<>(Map.ofEntries(
                 Map.entry(SceneType.WEBCAST, new WebcastScene(mainStage)),
-                Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage))
+                Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage)),
+                Map.entry(SceneType.ABOUT, new AboutScene(mainStage))
         ));
 
         this.scenes.get(splash).show();

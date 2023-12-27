@@ -21,7 +21,7 @@ public class SceneManager {
 
     private HashMap<SceneType, SceneWrapper> scenes;
     private Stage mainStage;
-    private SceneType currentScene;
+    private SceneType currentScene = splash;
 
     public SceneManager(Stage mainStage) {
         this.mainStage = mainStage;
@@ -36,9 +36,14 @@ public class SceneManager {
 
     public void switchScene(SceneType scene) {
         this.scenes.get(scene).show();
+        this.currentScene = scene;
     }
 
     public static void showErrorDialog(String message) {
         new Alert(Alert.AlertType.ERROR, message, ButtonType.CLOSE).show();
+    }
+
+    public SceneWrapper getCurrentScene() {
+        return this.scenes.get(currentScene);
     }
 }

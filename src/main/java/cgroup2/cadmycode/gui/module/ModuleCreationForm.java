@@ -6,6 +6,7 @@ import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.gui.SceneWrapper;
+import cgroup2.cadmycode.except.FieldValidationException;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -16,9 +17,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class ModuleCreationForm extends SceneWrapper {
 
@@ -74,9 +72,9 @@ public class ModuleCreationForm extends SceneWrapper {
 
     private void onSubmit(Event event) {
         try {
-            // doing it like this makes the email a valid URI,
-            // therefore we do not have to check with a regular expression
-            new URI("mailto:"+contactEmail.getText());
+            if (!contactEmail.getText().matches("\\w+@\\w+[.]\\w+")) {
+                throw new FieldValidationException("This is not a valid email address");
+            }
 
             Database.create(
                 new Module(
@@ -89,7 +87,7 @@ public class ModuleCreationForm extends SceneWrapper {
                     Integer.parseInt(version.getText())
                 )
             );
-        } catch (URISyntaxException | NumberFormatException e) {
+        } catch (FieldValidationException | NumberFormatException e) {
             SceneManager.showErrorDialog(e.getMessage());
             return;
         }

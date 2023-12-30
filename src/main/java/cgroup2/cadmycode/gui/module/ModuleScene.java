@@ -2,14 +2,10 @@ package cgroup2.cadmycode.gui.module;
 
 import cgroup2.cadmycode.content.ContentStatus;
 import cgroup2.cadmycode.content.Module;
-import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneType;
 import cgroup2.cadmycode.gui.SceneWrapper;
-import cgroup2.cadmycode.gui.webcast.WebcastCreationForm;
-import cgroup2.cadmycode.gui.webcast.WebcastDeletionPopup;
-import cgroup2.cadmycode.gui.webcast.WebcastEditForm;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -35,14 +31,14 @@ public class ModuleScene extends SceneWrapper {
     private TableView<Module> moduleTable = new TableView<>();
 
     private TableColumn<Module, Integer> attributeContentItemID = new TableColumn<>("ContentItemID");
-    private TableColumn<Module, String> attributeTitle = new TableColumn<>("title");
-    private TableColumn<Module, String> attributeDescription = new TableColumn<>("description");
-    private TableColumn<Module, LocalDate> attributePublicationDate = new TableColumn<>("publicationDate");
-    private TableColumn<Module, String> attributeStatus = new TableColumn<>("status");
-    private TableColumn<Module, String> attributeContactName = new TableColumn<>("contactName");
-    private TableColumn<Module, String> attributeContactEmail = new TableColumn<>("contactEmail");
-    private TableColumn<Module, Integer> attributeCourseID = new TableColumn<>("courseID");
-    private TableColumn<Module, String> attributeVersion = new TableColumn<>("version");
+    private TableColumn<Module, String> attributeTitle = new TableColumn<>("Title");
+    private TableColumn<Module, String> attributeDescription = new TableColumn<>("Description");
+    private TableColumn<Module, LocalDate> attributePublicationDate = new TableColumn<>("PublicationDate");
+    private TableColumn<Module, ContentStatus> attributeStatus = new TableColumn<>("Status");
+    private TableColumn<Module, String> attributeContactName = new TableColumn<>("ContactName");
+    private TableColumn<Module, String> attributeContactEmail = new TableColumn<>("ContactEmail");
+    private TableColumn<Module, Integer> attributeCourseID = new TableColumn<>("CourseID");
+    private TableColumn<Module, Integer> attributeVersion = new TableColumn<>("Version");
 
     public ModuleScene(Stage stage) {
         super(stage);
@@ -55,6 +51,7 @@ public class ModuleScene extends SceneWrapper {
         attributeContactName.setCellValueFactory(new PropertyValueFactory<>("ContactName"));
         attributeContactEmail.setCellValueFactory(new PropertyValueFactory<>("ContactEmail"));
         attributeCourseID.setCellValueFactory(new PropertyValueFactory<>("CourseID"));
+        attributeVersion.setCellValueFactory(new PropertyValueFactory<>("Version"));
 
         moduleTable.getColumns().addAll(
                 attributeContentItemID,
@@ -64,22 +61,30 @@ public class ModuleScene extends SceneWrapper {
                 attributeStatus,
                 attributeContactName,
                 attributeContactEmail,
-                attributeCourseID
+                attributeCourseID,
+                attributeVersion
         );
+
+        // make column titles fully visible
+        attributeContentItemID.setPrefWidth(120);
+        attributeContactName.setPrefWidth(100);
+        attributePublicationDate.setPrefWidth(110);
+        attributeContactEmail.setPrefWidth(100);
+
         VBox v1 = new VBox(home, refresh);
-        v1.setSpacing(10.0);
+        v1.setSpacing(40);
 
         VBox v2 = new VBox(create, edit, delete);
-        v2.setSpacing(40);
+        v2.setSpacing(10);
 
         HBox hBox = new HBox(v1, moduleTable, v2);
         hBox.setPadding(new Insets(10.0));
         hBox.setSpacing(10.0);
 
-//        create.setOnMouseClicked(this::onCreateButtonPressed);
-//        refresh.setOnMouseClicked(this::loadData);
-//        edit.setOnMouseClicked(this::onEditButtonPressed);
-//        delete.setOnMouseClicked(this::onDeleteButtonPressed);
+        create.setOnMouseClicked(this::onCreateButtonPressed);
+        refresh.setOnMouseClicked(this::loadData);
+        edit.setOnMouseClicked(this::onEditButtonPressed);
+        delete.setOnMouseClicked(this::onDeleteButtonPressed);
         home.setOnMouseClicked(this::onHomeButtonPressed);
 
         // serialize all the database items and add them to the UI
@@ -93,45 +98,43 @@ public class ModuleScene extends SceneWrapper {
         ));
     }
 
-//    private void onCreateButtonPressed(Event e) {
-//        Stage dialog = new Stage();
-//        dialog.initModality(Modality.APPLICATION_MODAL);
-//        dialog.initOwner(stage);
-//
-//        // shows the webcast form
-//        new WebcastCreationForm(dialog).show();
-//
-//        dialog.show();
-//    }
+    private void onCreateButtonPressed(Event e) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(stage);
 
-//    private void onEditButtonPressed(Event e) {
-//        if (moduleTable.getSelectionModel().getSelectedItem() == null) {
-//            return;
-//        }
-//
-//        Stage dialog = new Stage();
-//        dialog.initModality(Modality.APPLICATION_MODAL);
-//        dialog.initOwner(stage);
-//
-//        new WebcastEditForm(dialog, moduleTable.getSelectionModel().getSelectedItem()).show();
-//
-//        dialog.show();
-//    }
+        new ModuleCreationForm(dialog).show();
 
-//    private void onDeleteButtonPressed(Event e) {
-//        if (moduleTable.getSelectionModel().getSelectedItem() == null) {
-//            return;
-//        }
-//
-//        Stage dialog = new Stage();
-//        dialog.initModality(Modality.APPLICATION_MODAL);
-//        dialog.initOwner(stage);
-//
-//        // shows the deletion popup
-//        new WebcastDeletionPopup(dialog, moduleTable.getSelectionModel().getSelectedItem()).show();
-//
-//        dialog.show();
-//    }
+        dialog.show();
+    }
+
+    private void onEditButtonPressed(Event e) {
+        if (moduleTable.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(stage);
+
+        new ModuleEditForm(dialog, moduleTable.getSelectionModel().getSelectedItem()).show();
+
+        dialog.show();
+    }
+
+    private void onDeleteButtonPressed(Event e) {
+        if (moduleTable.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(stage);
+
+        new ModuleDeletionPopup(dialog, moduleTable.getSelectionModel().getSelectedItem()).show();
+
+        dialog.show();
+    }
 
     private void onHomeButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);

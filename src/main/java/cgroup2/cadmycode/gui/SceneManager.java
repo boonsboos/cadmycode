@@ -18,7 +18,7 @@ public class SceneManager {
     /**
      * This is the scene that is shown when the application is started
      */
-    private final SceneType splash = SceneType.MODULE;
+    private final SceneType splash = SceneType.DASHBOARD;
 
     private HashMap<SceneType, SceneWrapper> scenes;
     private Stage mainStage;
@@ -30,7 +30,7 @@ public class SceneManager {
         this.scenes = new HashMap<>(Map.ofEntries(
                 Map.entry(SceneType.WEBCAST, new WebcastScene(mainStage)),
                 Map.entry(SceneType.MODULE, new ModuleScene(mainStage)),
-                Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage))
+                Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage)),
                 Map.entry(SceneType.ABOUT, new AboutScene(mainStage))
         ));
 

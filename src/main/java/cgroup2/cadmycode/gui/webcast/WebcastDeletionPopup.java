@@ -19,8 +19,8 @@ public class WebcastDeletionPopup extends SceneWrapper {
 
     private Webcast selected;
 
-    Button yesButton = new Button("Yes");
-    Button noButton = new Button("No");
+    private Button yesButton = new Button("Yes");
+    private Button noButton = new Button("No");
 
     /**
         Shows a pop-up message to confirm whether you would like to delete the Webcast
@@ -49,7 +49,7 @@ public class WebcastDeletionPopup extends SceneWrapper {
     }
 
     private void onYesPressed(Event e) {
-        Database.deleteWebcastById(selected.getContentItemID());
+        Database.delete(selected);
         stage.close();
 
         // refresh table

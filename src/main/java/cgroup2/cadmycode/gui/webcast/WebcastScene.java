@@ -31,7 +31,8 @@ public class WebcastScene extends SceneWrapper {
     private Button edit = new Button("Edit");
     private Button delete = new Button("Delete");
     private Button refresh = new Button("Refresh");
-    private TableView<Webcast> webcastTable = new TableView<>();;
+    private TableView<Webcast> webcastTable = new TableView<>();
+
     private TableColumn<Webcast, Integer> attributeContentItemId = new TableColumn<>("ContentItemID");
     private TableColumn<Webcast, String> attributeTitle = new TableColumn<>("Title");
     private TableColumn<Webcast, String> attributeDescription = new TableColumn<>("Description");

@@ -1,6 +1,7 @@
 package cgroup2.cadmycode.gui.webcast;
 
 import cgroup2.cadmycode.content.ContentStatus;
+import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneManager;
@@ -23,22 +24,21 @@ import java.sql.Date;
 
 public class WebcastCreationForm extends SceneWrapper {
 
-    TextField titleField = new TextField();
-    TextArea descriptionArea = new TextArea();
-    DatePicker publicationDate = new DatePicker();
-    ComboBox<ContentStatus> status = new ComboBox<>(FXCollections.observableArrayList(
+    private TextField titleField = new TextField();
+    private TextArea descriptionArea = new TextArea();
+    private DatePicker publicationDate = new DatePicker();
+    private ComboBox<ContentStatus> status = new ComboBox<>(FXCollections.observableArrayList(
             ContentStatus.ACTIVE,
             ContentStatus.CONCEPT,
             ContentStatus.ARCHIVE
     ));
     // version is 0 for webcast
-    TextField length = new TextField(); // can only contain a number
-    TextField location = new TextField(); // a URL, starting with https://*.com
-    TextField organisation = new TextField();
-    TextField speaker = new TextField();
+    private TextField length = new TextField(); // can only contain a number
+    private TextField location = new TextField(); // a URL, starting with https://*.com
+    private TextField organisation = new TextField();
+    private TextField speaker = new TextField();
 
-    Button submit = new Button("Submit");
-
+    private Button submit = new Button("Submit");
 
     public WebcastCreationForm(Stage stage) {
         super(stage);
@@ -77,15 +77,17 @@ public class WebcastCreationForm extends SceneWrapper {
         // TODO: validation of fields
 
         try {
-            Database.createNewWebcast(
+            Database.create(
+                new Webcast(
                     titleField.getText(),
-                    descriptionArea.getText(),
+                    descriptionArea.getText().replace("\n", " "),
                     publicationDate.getValue(),
                     status.getValue(),
                     Integer.parseInt(length.getText()),
-                    new URL(location.getText()),
+                    new URL(location.getText()).toString(),
                     organisation.getText(),
                     speaker.getText()
+                )
             );
         } catch (MalformedURLException | NumberFormatException e) {
             SceneManager.showErrorDialog(e.getMessage());

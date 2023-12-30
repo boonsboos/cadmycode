@@ -23,6 +23,19 @@ public class Module extends EducationalContent {
         this.courseID = courseID;
     }
 
+    public Module(String title,
+                  String description,
+                  LocalDate publicationDate,
+                  ContentStatus status,
+                  String contactName,
+                  String contactEmail,
+                  int version
+    ) {
+        super(title, description, publicationDate, status, version);
+        this.contactName = contactName;
+        this.contactEmail = contactEmail;
+    }
+
     public String getContactName() {
         return contactName;
     }

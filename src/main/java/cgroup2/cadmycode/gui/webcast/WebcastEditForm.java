@@ -22,21 +22,21 @@ import java.net.URL;
 
 public class WebcastEditForm extends SceneWrapper {
 
-    TextField titleField = new TextField();
-    TextArea descriptionArea = new TextArea();
-    DatePicker publicationDate = new DatePicker();
-    ComboBox<ContentStatus> status = new ComboBox<>(FXCollections.observableArrayList(
+    private TextField titleField = new TextField();
+    private TextArea descriptionArea = new TextArea();
+    private DatePicker publicationDate = new DatePicker();
+    private ComboBox<ContentStatus> status = new ComboBox<>(FXCollections.observableArrayList(
             ContentStatus.ACTIVE,
             ContentStatus.CONCEPT,
             ContentStatus.ARCHIVE
     ));
     // version is 0 for webcast
-    TextField length = new TextField(); // can only contain a number
-    TextField location = new TextField(); // a URL, starting with https://*.com
-    TextField organisation = new TextField();
-    TextField speaker = new TextField();
+    private TextField length = new TextField(); // can only contain a number
+    private TextField location = new TextField(); // a URL, starting with https://*.com
+    private TextField organisation = new TextField();
+    private TextField speaker = new TextField();
 
-    Button submit = new Button("Submit edits");
+    private Button submit = new Button("Submit edits");
 
     public WebcastEditForm(Stage stage, Webcast selected) {
         super(stage);
@@ -82,8 +82,8 @@ public class WebcastEditForm extends SceneWrapper {
 
     private void onSubmit(Event e) {
         try {
-            Database.updateWebcast(new Webcast(
-                    0,
+            Database.update(
+                new Webcast(
                     titleField.getText(),
                     descriptionArea.getText(),
                     publicationDate.getValue(),
@@ -92,7 +92,8 @@ public class WebcastEditForm extends SceneWrapper {
                     new URL(location.getText()).toString(), // validate URL
                     speaker.getText(),
                     organisation.getText()
-            ));
+                )
+            );
         }  catch (MalformedURLException | NumberFormatException exc) {
             SceneManager.showErrorDialog(exc.getMessage());
             return;

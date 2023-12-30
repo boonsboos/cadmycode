@@ -1,6 +1,6 @@
-package cgroup2.cadmycode.gui.webcast;
+package cgroup2.cadmycode.gui.module;
 
-import cgroup2.cadmycode.content.Webcast;
+import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneWrapper;
@@ -15,20 +15,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class WebcastDeletionPopup extends SceneWrapper {
+public class ModuleDeletionPopup extends SceneWrapper {
 
-    private Webcast selected;
+    private Module selected;
 
     private Button yesButton = new Button("Yes");
     private Button noButton = new Button("No");
 
     /**
-        Shows a pop-up message to confirm whether you would like to delete the Webcast
+     Shows a pop-up message to confirm whether you would like to delete the Webcast
 
-        @param stage - the stage on which the popup is to be drawn
-        @param selected - the selected webcast
+     @param stage - the stage on which the popup is to be drawn
+     @param selected - the selected webcast
      */
-    public WebcastDeletionPopup(Stage stage, Webcast selected) {
+    public ModuleDeletionPopup(Stage stage, Module selected) {
         super(stage);
 
         this.selected = selected;
@@ -37,7 +37,7 @@ public class WebcastDeletionPopup extends SceneWrapper {
         h.setSpacing(10);
         h.setAlignment(Pos.CENTER);
 
-        VBox v = new VBox(new Label("Are you sure you want to delete this? (It's permanent)"), h);
+        VBox v = new VBox(new Label("Are you sure you want to delete this module? (It's permanent)"), h);
         v.setSpacing(20);
         v.setAlignment(Pos.CENTER);
         v.setPadding(new Insets(20));
@@ -53,7 +53,7 @@ public class WebcastDeletionPopup extends SceneWrapper {
         stage.close();
 
         // refresh table
-        ((WebcastScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
+        ((ModuleScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
     }
 
     private void onNoPressed(Event e) {

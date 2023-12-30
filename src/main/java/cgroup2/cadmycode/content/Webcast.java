@@ -25,6 +25,21 @@ public class Webcast extends EducationalContent{
         this.organisation = organisation;
     }
 
+    public Webcast(String title,
+                   String description,
+                   LocalDate publicationDate,
+                   ContentStatus status,
+                   int length,
+                   String URL,
+                   String speaker,
+                   String organisation) {
+        super(title, description, publicationDate, status);
+        this.length = length;
+        this.URL = URL;
+        this.speaker = speaker;
+        this.organisation = organisation;
+    }
+
     public int getLength() {
         return length;
     }

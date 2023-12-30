@@ -96,4 +96,12 @@ public abstract class EducationalContent {
     public void setStatus(ContentStatus status) {
         this.status = status;
     }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }

@@ -1,28 +1,24 @@
-package cgroup2.cadmycode.gui.webcast;
+package cgroup2.cadmycode.gui.module;
 
 import cgroup2.cadmycode.content.ContentStatus;
-import cgroup2.cadmycode.content.Webcast;
+import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.gui.SceneWrapper;
+import cgroup2.cadmycode.except.FieldValidationException;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Date;
-
-public class WebcastCreationForm extends SceneWrapper {
+public class ModuleCreationForm extends SceneWrapper {
 
     private TextField titleField = new TextField();
     private TextArea descriptionArea = new TextArea();
@@ -32,37 +28,38 @@ public class WebcastCreationForm extends SceneWrapper {
             ContentStatus.CONCEPT,
             ContentStatus.ARCHIVE
     ));
-    // version is 0 for webcast
-    private TextField length = new TextField(); // can only contain a number
-    private TextField location = new TextField(); // a URL, starting with https://*.com
-    private TextField organisation = new TextField();
-    private TextField speaker = new TextField();
+    private TextField version = new TextField(); // can only contain a number
+    private TextField contactName = new TextField();
+    private TextField contactEmail = new TextField();
 
-    private Button submit = new Button("Submit");
+    Button submit = new Button("Submit");
 
-    public WebcastCreationForm(Stage stage) {
+
+    public ModuleCreationForm(Stage stage) {
         super(stage);
 
         Label titleLabel = new Label("Title");
         Label descriptionLabel = new Label("Description");
         Label pubDateLabel = new Label("Date of publication");
         Label statusLabel = new Label("Status");
-        Label lengthLabel = new Label("Length");
-        Label locationLabel = new Label("Web address");
-        Label orgLabel = new Label("Organisation");
-        Label speakerLabel = new Label("Speaker");
+        Label versionLabel = new Label("Version");
+        Label contactLabel = new Label("Contact");
+        Label emailLabel = new Label("Contact e-mail");
 
         HBox h1 = new HBox(titleLabel, titleField);
         HBox h2 = new HBox(descriptionLabel, descriptionArea);
         HBox h3 = new HBox(pubDateLabel, publicationDate);
         HBox h4 = new HBox(statusLabel, status);
-        HBox h5 = new HBox(lengthLabel, length);
-        HBox h6 = new HBox(locationLabel, location);
-        HBox h7 = new HBox(orgLabel, organisation);
-        HBox h8 = new HBox(speakerLabel, speaker);
-        HBox h9 = new HBox(new Label(), submit);
+        HBox h5 = new HBox(versionLabel, version);
+        HBox h6 = new HBox(contactLabel, contactName);
+        HBox h7 = new HBox(emailLabel, contactEmail);
+        HBox h8 = new HBox(new Label(), submit);
 
-        VBox v = new VBox(h1, h2, h3, h4, h5, h6, h7, h8, h9);
+        VBox v = new VBox(h1, h2, h3, h4, h5, h6, h7, h8);
+
+        for (var child : v.getChildren()) {
+            ((HBox) child).setSpacing(10);
+        }
 
         v.setSpacing(10.0);
         v.setPadding(new Insets(10.0));
@@ -74,29 +71,30 @@ public class WebcastCreationForm extends SceneWrapper {
     }
 
     private void onSubmit(Event event) {
-        // TODO: validation of fields
-
         try {
+            if (!contactEmail.getText().matches("\\w+@\\w+[.]\\w+")) {
+                throw new FieldValidationException("This is not a valid email address");
+            }
+
             Database.create(
-                new Webcast(
+                new Module(
                     titleField.getText(),
                     descriptionArea.getText().replace("\n", " "),
                     publicationDate.getValue(),
                     status.getValue(),
-                    Integer.parseInt(length.getText()),
-                    new URL(location.getText()).toString(),
-                    organisation.getText(),
-                    speaker.getText()
+                    contactName.getText(),
+                    contactEmail.getText(),
+                    Integer.parseInt(version.getText())
                 )
             );
-        } catch (MalformedURLException | NumberFormatException e) {
+        } catch (FieldValidationException | NumberFormatException e) {
             SceneManager.showErrorDialog(e.getMessage());
             return;
         }
 
         stage.close();
         // refresh table
-        ((WebcastScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
+        ((ModuleScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
     }
 
 }

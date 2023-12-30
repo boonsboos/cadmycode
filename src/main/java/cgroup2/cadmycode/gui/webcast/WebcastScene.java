@@ -26,20 +26,21 @@ import javafx.stage.Stage;
 
 public class WebcastScene extends SceneWrapper {
 
-    Button home = new Button("Home");
-    Button create = new Button("+");
-    Button edit = new Button("Edit");
-    Button delete = new Button("Delete");
-    Button refresh = new Button("Refresh");
-    TableView<Webcast> webcastTable = new TableView<>();;
-    TableColumn<Webcast, Integer> attributeContentItemId = new TableColumn<>("ContentItemID");
-    TableColumn<Webcast, String> attributeTitle = new TableColumn<>("Title");
-    TableColumn<Webcast, String> attributeDescription = new TableColumn<>("Description");
-    TableColumn<Webcast, ContentStatus> attributeStatus = new TableColumn<>("Status");
-    TableColumn<Webcast, Integer> attributeLength = new TableColumn<>("Length");
-    TableColumn<Webcast, String> attributeURL = new TableColumn<>("URL");
-    TableColumn<Webcast, String> attributeSpeaker = new TableColumn<>("Speaker");
-    TableColumn<Webcast, String> attributeOrganisation = new TableColumn<>("Organisation");
+    private Button home = new Button("Home");
+    private Button create = new Button("+");
+    private Button edit = new Button("Edit");
+    private Button delete = new Button("Delete");
+    private Button refresh = new Button("Refresh");
+    private TableView<Webcast> webcastTable = new TableView<>();
+
+    private TableColumn<Webcast, Integer> attributeContentItemId = new TableColumn<>("ContentItemID");
+    private TableColumn<Webcast, String> attributeTitle = new TableColumn<>("Title");
+    private TableColumn<Webcast, String> attributeDescription = new TableColumn<>("Description");
+    private TableColumn<Webcast, ContentStatus> attributeStatus = new TableColumn<>("Status");
+    private TableColumn<Webcast, Integer> attributeLength = new TableColumn<>("Length");
+    private TableColumn<Webcast, String> attributeURL = new TableColumn<>("URL");
+    private TableColumn<Webcast, String> attributeSpeaker = new TableColumn<>("Speaker");
+    private TableColumn<Webcast, String> attributeOrganisation = new TableColumn<>("Organisation");
 
     public WebcastScene(Stage stage) {
         super(stage);

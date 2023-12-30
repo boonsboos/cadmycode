@@ -90,7 +90,6 @@ CREATE TABLE Webcast (
 	speaker nvarchar(100) NOT NULL,
 
 	CONSTRAINT FK_Webcast_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID) ON DELETE CASCADE,
-	CONSTRAINT CK_Webcast_id_not_in_Module CHECK(contentItemID NOT IN (SELECT contentItemID FROM Module)),
 );
 
 CREATE TABLE CMCUser (

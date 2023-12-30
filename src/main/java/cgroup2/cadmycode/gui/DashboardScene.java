@@ -35,7 +35,7 @@ public class DashboardScene extends SceneWrapper {
 
         webcast.setOnMouseClicked(this::onWebcastsButtonPressed);
         about.setOnMouseClicked(this::onAboutButtonPressed);
-        module.setOnMouseClicked(this::onAboutButtonPressed);
+        module.setOnMouseClicked(this::onModuleButtonPressed);
 
         this.scene = new Scene(root);
     }

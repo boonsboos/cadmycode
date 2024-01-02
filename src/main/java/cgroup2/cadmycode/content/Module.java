@@ -47,4 +47,16 @@ public class Module extends EducationalContent {
     public int getCourseID() {
         return courseID;
     }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
+    }
 }

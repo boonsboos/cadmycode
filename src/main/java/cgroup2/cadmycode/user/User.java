@@ -88,6 +88,10 @@ public class User {
         return dateOfBirth;
     }
 
+    public Sex getSex() {
+        return sex;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

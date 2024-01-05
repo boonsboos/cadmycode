@@ -40,7 +40,7 @@ VALUES
 --
 CREATE TABLE CMCCertificate (
 	certificateID int IDENTITY(1,1) PRIMARY KEY,
-	certificateName nvarchar(100),
+	certificateName nvarchar(100) NOT NULL,
 
 	CONSTRAINT UQ_CMCCertificate_certificateName UNIQUE (certificateName)
 );
@@ -134,7 +134,7 @@ CREATE TABLE ViewedItems (
 	userID int NOT NULL,
 	viewed tinyint NOT NULL,
 
-	CONSTRAINT FK_ViewedItems_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID),
+	CONSTRAINT FK_ViewedItems_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID) ON DELETE CASCADE,
 	CONSTRAINT FK_ViewedItems_Content FOREIGN KEY (contentItemID) REFERENCES Content(contentItemID),
 	CONSTRAINT UQ_ViewedItems_contentItemID_userID UNIQUE(contentItemID, userID),
 )

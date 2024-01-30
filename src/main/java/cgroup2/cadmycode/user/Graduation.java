@@ -16,6 +16,13 @@ public class Graduation {
         this.certID = certID;
     }
 
+    public Graduation(int userID, String grantedBy, int grade, int certID) {
+        this.userID = userID;
+        this.grantedBy = grantedBy;
+        this.grade = grade;
+        this.certID = certID;
+    }
+
     public int getGraduationID() {
         return this.graduationID;
     }

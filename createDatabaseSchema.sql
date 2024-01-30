@@ -109,7 +109,7 @@ CREATE TABLE CMCUser (
 CREATE TABLE Enrollment (
 	userID int NOT NULL,
 	courseID int NOT NULL,
-	enrollmentTime datetime PRIMARY KEY CONSTRAINT DF_Enrollment_enrollmentTime DEFAULT GETDATE(),
+	enrollmentTime datetime CONSTRAINT DF_Enrollment_enrollmentTime DEFAULT GETDATE(),
 
 	CONSTRAINT FK_Enrollment_CMCUser FOREIGN KEY (userID) REFERENCES CMCUser(userID) ON DELETE CASCADE,
 	CONSTRAINT FK_Enrollment_Course FOREIGN KEY (courseID) REFERENCES Course(courseID) ON DELETE NO ACTION,
@@ -130,7 +130,7 @@ CREATE TABLE Graduation (
 );
 
 CREATE TABLE ViewedItems (
-	contentItemID int PRIMARY KEY,
+	contentItemID int,
 	userID int NOT NULL,
 	viewed tinyint NOT NULL,
 

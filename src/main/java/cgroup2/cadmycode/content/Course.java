@@ -27,6 +27,14 @@ public class Course {
         this.certificateID = certificateID;
     }
 
+    public Course(String courseName, String subject, String introductionText, CourseLevel level, int certificateID) {
+        this.courseName = courseName;
+        this.subject = subject;
+        this.introductionText = introductionText;
+        this.level = level;
+        this.certificateID = certificateID;
+    }
+
     public String getCourseName() {
         return courseName;
     }

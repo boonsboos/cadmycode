@@ -74,8 +74,6 @@ public class WebcastCreationForm extends SceneWrapper {
     }
 
     private void onSubmit(Event event) {
-        // TODO: validation of fields
-
         try {
             Database.create(
                 new Webcast(

@@ -17,17 +17,15 @@ public class CadMyCode {
             System.out.println("You have to provide your database password as a commandline argument.");
             System.exit(1);
         }
-        
-        if (args.length == 2 && args[1].equals("-generate")) {
-            TestDataCreator.generate(); // creates the mock user data
-        }
+
         try {
             DriverManager.setLoginTimeout(20);
-            Database.connect(DriverManager.getConnection(
-                    "jdbc:sqlserver://localhost:1433;databaseName=dev_codecademy;encrypt=false", "sa", args[0]));
+            Database.connect(DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=dev_codecademy;encrypt=false", "sa", args[0]));
+            if (args.length == 2 && args[1].equals("-generate")) {
+                TestDataCreator.generate(); // creates the mock user data
+            }
         } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to connect to the database. Try again later.\n" + e.getMessage(),
-                    ButtonType.CLOSE).show();
+            System.out.println("Failed to connect to the database. Try again later.\n"+e.getMessage());
         }
 
         Application.launch(GuiMain.class); // launch the GUI

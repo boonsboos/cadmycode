@@ -276,6 +276,7 @@ public class Database {
 
             insertInContent.execute();
         } catch (SQLException e){
+            System.out.println(e.getMessage());
             SceneManager.showErrorDialog(e.getMessage());
         }
 
@@ -307,10 +308,10 @@ public class Database {
     public static void update(Module m) {
         try {
             PreparedStatement updateModule = databaseConnection.prepareStatement(
-                    "UPDATE Webcast\n" +
+                    "UPDATE Module\n" +
                     "SET contactName = ?,\n"+
-                    "courseID = ?\n"+
-                    "contactEmail = ?,\n"+
+                    "courseID = ?,\n"+
+                    "contactEmail = ?\n"+
                     "WHERE contentItemID = ?;"
             );
 
@@ -337,6 +338,7 @@ public class Database {
 
             updateContent.execute();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             SceneManager.showErrorDialog(e.getMessage());
         }
     }
@@ -400,9 +402,8 @@ public class Database {
         try {
             PreparedStatement selectModules = databaseConnection.prepareStatement(
                     "SELECT *\n"+
-                    "FROM Module\n"+
-                    "JOIN Content ON Module.contentItemID = Content.contentItemID\n"+
-                    "ORDER BY Content.contentItemID ASC\n"+
+                    "FROM Course\n"+
+                    "ORDER BY courseID ASC\n"+
                     "OFFSET ? ROWS\n"+
                     "FETCH NEXT 15 ROWS ONLY;"
             );
@@ -423,6 +424,7 @@ public class Database {
             }
 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             SceneManager.showErrorDialog(e.getMessage());
         }
 
@@ -633,6 +635,7 @@ public class Database {
             updateUser.setInt(6, u.getSex().asInt());
             updateUser.setInt(7, u.getUserID());
             updateUser.execute();
+
         } catch (SQLException e) {
             SceneManager.showErrorDialog(e.getMessage()+"\nNothing has changed.");
         }
@@ -669,6 +672,7 @@ public class Database {
             createGraduation.setInt(4, g.getGrade());
             createGraduation.execute();
         } catch (SQLException e) {
+            System.out.println(e);
             SceneManager.showErrorDialog(e.getMessage()+"\nNothing has been submitted.");
         }
     }
@@ -729,6 +733,7 @@ public class Database {
             createEnroll.setTimestamp(3, Timestamp.from(e.getTime().toInstant(ZoneOffset.UTC)));
             createEnroll.execute();
         } catch (SQLException exc) {
+            System.out.println(exc.getMessage());
             SceneManager.showErrorDialog(exc.getMessage()+"\nNothing has been submitted.");
         }
     }
@@ -777,7 +782,7 @@ public class Database {
     public static void create(ViewedItem v) {
         try {
             PreparedStatement createViewed = databaseConnection.prepareStatement(
-                    "INSERT INTO ViewedItem (contentItemID, userID, viewed)\n"+
+                    "INSERT INTO ViewedItems (contentItemID, userID, viewed)\n"+
                     "VALUES (?, ?, ?);"
             );
 
@@ -786,6 +791,7 @@ public class Database {
             createViewed.setInt(3, v.getViewed());
             createViewed.execute();
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             SceneManager.showErrorDialog(e.getMessage()+"\nNothing has been submitted.");
         }
     }

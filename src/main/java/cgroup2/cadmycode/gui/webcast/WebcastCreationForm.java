@@ -6,6 +6,9 @@ import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.gui.SceneWrapper;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.Date;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -17,10 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Date;
 
 public class WebcastCreationForm extends SceneWrapper {
 
@@ -83,8 +82,8 @@ public class WebcastCreationForm extends SceneWrapper {
                     status.getValue(),
                     Integer.parseInt(length.getText()),
                     new URL(location.getText()).toString(),
-                    organisation.getText(),
-                    speaker.getText()
+                    speaker.getText(),
+                    organisation.getText()
                 )
             );
         } catch (MalformedURLException | NumberFormatException e) {
@@ -95,6 +94,5 @@ public class WebcastCreationForm extends SceneWrapper {
         stage.close();
         // refresh table
         ((WebcastScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
-    }
-
+  }
 }

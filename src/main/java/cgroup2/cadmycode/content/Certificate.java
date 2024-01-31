@@ -10,6 +10,11 @@ public class Certificate {
         this.certificateName = name;
     }
 
+    public Certificate(String certificateName) {
+        this.certificateID = 0;
+        this.certificateName = certificateName;
+    }
+
     public int getCertificateID() {
         return certificateID;
     }

@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui;
 
+import cgroup2.cadmycode.gui.certificate.CertificateScene;
 import cgroup2.cadmycode.gui.module.ModuleScene;
 import cgroup2.cadmycode.gui.webcast.WebcastScene;
 import javafx.scene.control.Alert;
@@ -31,7 +32,8 @@ public class SceneManager {
                 Map.entry(SceneType.WEBCAST, new WebcastScene(mainStage)),
                 Map.entry(SceneType.MODULE, new ModuleScene(mainStage)),
                 Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage)),
-                Map.entry(SceneType.ABOUT, new AboutScene(mainStage))
+                Map.entry(SceneType.ABOUT, new AboutScene(mainStage)),
+                Map.entry(SceneType.CERTIFICATE, new CertificateScene(mainStage))
         ));
 
         this.scenes.get(splash).show();

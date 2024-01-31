@@ -38,6 +38,8 @@ public class WebcastEditForm extends SceneWrapper {
 
     private Button submit = new Button("Submit edits");
 
+    private int id = 0;
+
     public WebcastEditForm(Stage stage, Webcast selected) {
         super(stage);
 
@@ -78,12 +80,15 @@ public class WebcastEditForm extends SceneWrapper {
         submit.setOnMouseClicked(this::onSubmit);
 
         this.scene = new Scene(v);
+
+        this.id = selected.getContentItemID();
     }
 
     private void onSubmit(Event e) {
         try {
             Database.update(
                 new Webcast(
+                    this.id,
                     titleField.getText(),
                     descriptionArea.getText(),
                     publicationDate.getValue(),

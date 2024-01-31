@@ -34,6 +34,8 @@ public class ModuleEditForm extends SceneWrapper {
 
     Button submit = new Button("Submit edits");
 
+    private int id = 0;
+
     public ModuleEditForm(Stage stage, Module selected) {
         super(stage);
 
@@ -67,6 +69,8 @@ public class ModuleEditForm extends SceneWrapper {
         submit.setOnMouseClicked(this::onSubmit);
 
         this.scene = new Scene(v);
+
+        this.id = selected.getContentItemID();
     }
 
     private void onSubmit(Event e) {
@@ -77,6 +81,7 @@ public class ModuleEditForm extends SceneWrapper {
 
             Database.update(
                 new Module(
+                    this.id,
                     titleField.getText(),
                     descriptionArea.getText().replace("\n", " "),
                     publicationDate.getValue(),

@@ -17,22 +17,22 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class CertificateEditForm extends SceneWrapper {
-    private TextField idField = new TextField();
+public class CertificateEditForm extends SceneWrapper { ;
     private TextField nameField = new TextField();
 
     Button submit = new Button("Submit edits");
+
+    private int id = 0;
 
     public CertificateEditForm(Stage stage, Certificate selected) {
         super(stage);
         
         nameField.setText(selected.getCertificateName());
-        idField.setText(selected.getCertificateID()+"");
 
         Label titleLabel = new Label("Name");
 
         HBox h1 = new HBox(titleLabel, nameField);
-        HBox h2 = new HBox(new Label(), submit);
+        HBox h2 = new HBox(submit);
 
         VBox v = new VBox(h1, h2);
 
@@ -47,12 +47,13 @@ public class CertificateEditForm extends SceneWrapper {
         submit.setOnMouseClicked(this::onSubmit);
 
         this.scene = new Scene(v);
+        this.id = selected.getCertificateID();
     }
 
     private void onSubmit(Event e) {
         try {
             Database.update(
-                new Certificate(Integer.parseInt(idField.getText()), nameField.getText())
+                new Certificate(id, nameField.getText())
             );
         }  catch (NumberFormatException exc) {
             SceneManager.showErrorDialog(exc.getMessage());

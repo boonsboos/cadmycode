@@ -36,6 +36,20 @@ public class Module extends EducationalContent {
         this.contactEmail = contactEmail;
     }
 
+    public Module(int contentItemID,
+                  String title,
+                  String description,
+                  LocalDate publicationDate,
+                  ContentStatus status,
+                  String contactName,
+                  String contactEmail,
+                  int version
+    ) {
+        super(contentItemID, title, description, publicationDate, status, version);
+        this.contactName = contactName;
+        this.contactEmail = contactEmail;
+    }
+
     public String getContactName() {
         return contactName;
     }

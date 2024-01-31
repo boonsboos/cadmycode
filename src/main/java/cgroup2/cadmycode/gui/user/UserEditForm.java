@@ -32,6 +32,9 @@ public class UserEditForm extends SceneWrapper {
     ));
     private Button submit = new Button("Submit edits");
 
+    // the user ID to save
+    private int id = 0;
+
     public UserEditForm(Stage stage, User selected){
         super(stage);
 
@@ -69,11 +72,14 @@ public class UserEditForm extends SceneWrapper {
         submit.setOnMouseClicked(this::onSubmit);
 
         this.scene = new Scene(v);
+
+        this.id = selected.getUserID();
     }
     private void onSubmit(Event event) {
         try {
             Database.update(
                 new User(
+                    this.id,
                     nameArea.getText(),
                     emailArea.getText(),
                     addressArea.getText(),

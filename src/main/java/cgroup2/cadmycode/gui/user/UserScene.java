@@ -49,7 +49,7 @@ public class UserScene extends SceneWrapper {
     public  UserScene(Stage stage){
         super(stage);
         stage.setTitle("Users");
-        attributeUserId.setCellValueFactory(new PropertyValueFactory<>("UserId"));
+        attributeUserId.setCellValueFactory(new PropertyValueFactory<>("UserID"));
         attributeEmail.setCellValueFactory(new PropertyValueFactory<>("Email"));
         attributeName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         attributeAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));

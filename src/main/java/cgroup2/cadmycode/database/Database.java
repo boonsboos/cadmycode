@@ -623,7 +623,7 @@ public class Database {
                     "adres = ?,\n"+
                     "country = ?,\n"+
                     "city = ?,\n"+
-                    "sex = ?,\n"+
+                    "sex = ?\n"+
                     "WHERE userID = ?;"
             );
 

@@ -5,5 +5,6 @@ public enum SceneType {
     WEBCAST,
     MODULE,
     ABOUT,
-    CERTIFICATE,
+    USER,
+    CERTIFICATE
 }

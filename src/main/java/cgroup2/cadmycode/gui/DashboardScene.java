@@ -15,13 +15,14 @@ public class DashboardScene extends SceneWrapper {
     private final Button webcast = new Button("Webcast");
     private final Button about = new Button("About");
     private final Button module = new Button("Module");
+    private final Button user = new Button("User");
     private final Button certificate = new Button("Certificate");
 
     public DashboardScene(Stage stage) {
         super(stage);
 
         // this should become a list of buttons for the CRUD parts
-        VBox v1 = new VBox(webcast, module, certificate);
+        VBox v1 = new VBox(webcast, module, user, certificate);
         v1.setSpacing(10);
 
         TitledPane buttonMenu = new TitledPane("Overviews", v1);
@@ -37,6 +38,7 @@ public class DashboardScene extends SceneWrapper {
         webcast.setOnMouseClicked(this::onWebcastsButtonPressed);
         about.setOnMouseClicked(this::onAboutButtonPressed);
         module.setOnMouseClicked(this::onModuleButtonPressed);
+        user.setOnMouseClicked(this::onUserButtonPressed);
         certificate.setOnMouseClicked(this::onCertificateButtonPressed);
 
         this.scene = new Scene(root);
@@ -52,6 +54,10 @@ public class DashboardScene extends SceneWrapper {
 
     private void onModuleButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.MODULE);
+    }
+
+    private void onUserButtonPressed(Event e) {
+        GuiMain.SCENE_MANAGER.switchScene(SceneType.USER);
     }
 
     private void onCertificateButtonPressed(Event e) {

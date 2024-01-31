@@ -23,81 +23,76 @@ import javafx.stage.Stage;
 
 public class WebcastCreationForm extends SceneWrapper {
 
-  private TextField titleField = new TextField();
-  private TextArea descriptionArea = new TextArea();
-  private DatePicker publicationDate = new DatePicker();
-  private ComboBox<ContentStatus> status = new ComboBox<>(
-    FXCollections.observableArrayList(
-      ContentStatus.ACTIVE,
-      ContentStatus.CONCEPT,
-      ContentStatus.ARCHIVE
-    )
-  );
-  // version is 0 for webcast
-  private TextField length = new TextField(); // can only contain a number
-  private TextField location = new TextField(); // a URL, starting with https://*.com
-  private TextField organisation = new TextField();
-  private TextField speaker = new TextField();
+    private TextField titleField = new TextField();
+    private TextArea descriptionArea = new TextArea();
+    private DatePicker publicationDate = new DatePicker();
+    private ComboBox<ContentStatus> status = new ComboBox<>(FXCollections.observableArrayList(
+            ContentStatus.ACTIVE,
+            ContentStatus.CONCEPT,
+            ContentStatus.ARCHIVE
+    ));
+    // version is 0 for webcast
+    private TextField length = new TextField(); // can only contain a number
+    private TextField location = new TextField(); // a URL, starting with https://*.com
+    private TextField organisation = new TextField();
+    private TextField speaker = new TextField();
 
-  private Button submit = new Button("Submit");
+    private Button submit = new Button("Submit");
 
-  public WebcastCreationForm(Stage stage) {
-    super(stage);
-    Label titleLabel = new Label("Title");
-    Label descriptionLabel = new Label("Description");
-    Label pubDateLabel = new Label("Date of publication");
-    Label statusLabel = new Label("Status");
-    Label lengthLabel = new Label("Length");
-    Label locationLabel = new Label("Web address");
-    Label orgLabel = new Label("Organisation");
-    Label speakerLabel = new Label("Speaker");
+    public WebcastCreationForm(Stage stage) {
+        super(stage);
 
-    HBox h1 = new HBox(titleLabel, titleField);
-    HBox h2 = new HBox(descriptionLabel, descriptionArea);
-    HBox h3 = new HBox(pubDateLabel, publicationDate);
-    HBox h4 = new HBox(statusLabel, status);
-    HBox h5 = new HBox(lengthLabel, length);
-    HBox h6 = new HBox(locationLabel, location);
-    HBox h7 = new HBox(orgLabel, organisation);
-    HBox h8 = new HBox(speakerLabel, speaker);
-    HBox h9 = new HBox(new Label(), submit);
+        Label titleLabel = new Label("Title");
+        Label descriptionLabel = new Label("Description");
+        Label pubDateLabel = new Label("Date of publication");
+        Label statusLabel = new Label("Status");
+        Label lengthLabel = new Label("Length");
+        Label locationLabel = new Label("Web address");
+        Label orgLabel = new Label("Organisation");
+        Label speakerLabel = new Label("Speaker");
 
-    VBox v = new VBox(h1, h2, h3, h4, h5, h6, h7, h8, h9);
+        HBox h1 = new HBox(titleLabel, titleField);
+        HBox h2 = new HBox(descriptionLabel, descriptionArea);
+        HBox h3 = new HBox(pubDateLabel, publicationDate);
+        HBox h4 = new HBox(statusLabel, status);
+        HBox h5 = new HBox(lengthLabel, length);
+        HBox h6 = new HBox(locationLabel, location);
+        HBox h7 = new HBox(orgLabel, organisation);
+        HBox h8 = new HBox(speakerLabel, speaker);
+        HBox h9 = new HBox(new Label(), submit);
 
-    v.setSpacing(10.0);
-    v.setPadding(new Insets(10.0));
-    v.setAlignment(Pos.CENTER_LEFT);
+        VBox v = new VBox(h1, h2, h3, h4, h5, h6, h7, h8, h9);
 
-    submit.setOnMouseClicked(this::onSubmit);
+        v.setSpacing(10.0);
+        v.setPadding(new Insets(10.0));
+        v.setAlignment(Pos.CENTER_LEFT);
 
-    this.scene = new Scene(v);
-  }
+        submit.setOnMouseClicked(this::onSubmit);
 
-  private void onSubmit(Event event) {
-    // TODO: validation of fields
-
-    try {
-      Database.create(
-        new Webcast(
-          titleField.getText(),
-          descriptionArea.getText().replace("\n", " "),
-          publicationDate.getValue(),
-          status.getValue(),
-          Integer.parseInt(length.getText()),
-          new URL(location.getText()).toString(),
-          speaker.getText(),
-          organisation.getText()
-        )
-      );
-    } catch (MalformedURLException | NumberFormatException e) {
-      SceneManager.showErrorDialog(e.getMessage());
-      return;
+        this.scene = new Scene(v);
     }
 
-    stage.close();
-    // refresh table
-    ((WebcastScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(
-        new Event(EventType.ROOT)
-      );
+    private void onSubmit(Event event) {
+        try {
+            Database.create(
+                new Webcast(
+                    titleField.getText(),
+                    descriptionArea.getText().replace("\n", " "),
+                    publicationDate.getValue(),
+                    status.getValue(),
+                    Integer.parseInt(length.getText()),
+                    new URL(location.getText()).toString(),
+                    speaker.getText(),
+                    organisation.getText()
+                )
+            );
+        } catch (MalformedURLException | NumberFormatException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+            return;
+        }
+
+        stage.close();
+        // refresh table
+        ((WebcastScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
   }
 }

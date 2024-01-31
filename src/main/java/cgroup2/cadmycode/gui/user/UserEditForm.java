@@ -72,16 +72,16 @@ public class UserEditForm extends SceneWrapper {
     }
     private void onSubmit(Event event) {
         try {
-            Database.create(
-                    new User(
-                            nameArea.getText(),
-                            emailArea.getText(),
-                            addressArea.getText(),
-                            countryArea.getText(),
-                            cityArea.getText(),
-                            dateOfBirthArea.getValue(),
-                            sexBox.getValue()
-                    )
+            Database.update(
+                new User(
+                    nameArea.getText(),
+                    emailArea.getText(),
+                    addressArea.getText(),
+                    countryArea.getText(),
+                    cityArea.getText(),
+                    dateOfBirthArea.getValue(),
+                    sexBox.getValue()
+                )
             );
         } catch (Exception e) {
             SceneManager.showErrorDialog(e.getMessage());

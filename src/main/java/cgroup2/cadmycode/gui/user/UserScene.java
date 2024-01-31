@@ -55,7 +55,7 @@ public class UserScene extends SceneWrapper {
         attributeAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         attributeCountry.setCellValueFactory(new PropertyValueFactory<>("Country"));
         attributeCity.setCellValueFactory(new PropertyValueFactory<>("City"));
-        attributeDateOfBirth.setCellValueFactory(new PropertyValueFactory<>("Date of birth"));
+        attributeDateOfBirth.setCellValueFactory(new PropertyValueFactory<>("DateOfBirth"));
         attributeSex.setCellValueFactory(new PropertyValueFactory<>("Sex"));
 
         userTable.getColumns().addAll(

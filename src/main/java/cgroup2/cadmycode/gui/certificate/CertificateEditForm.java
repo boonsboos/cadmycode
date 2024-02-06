@@ -17,10 +17,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class CertificateEditForm extends SceneWrapper { ;
-    private TextField nameField = new TextField();
+public class CertificateEditForm extends SceneWrapper {
 
-    Button submit = new Button("Submit edits");
+    private TextField nameField = new TextField();
+    private Button submit = new Button("Submit edits");
 
     private int id = 0;
 

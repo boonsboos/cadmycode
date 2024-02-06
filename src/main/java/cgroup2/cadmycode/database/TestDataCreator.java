@@ -96,7 +96,7 @@ public class TestDataCreator {
          Webcasts
         */
         Database.create(new Webcast(
-            "Wat", "by Destroy All Software", LocalDate.of(2012, 5, 2), ContentStatus.ACTIVE,
+            "Wat", "Talk by Destroy All Software", LocalDate.of(2012, 5, 2), ContentStatus.ACTIVE,
             257, "https://www.destroyallsoftware.com/talks/wat", "Gary Bernhardt", "Destroy All Software"
         ));
         Database.create(new Webcast(

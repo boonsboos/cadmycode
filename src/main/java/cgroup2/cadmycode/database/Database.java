@@ -733,11 +733,16 @@ public class Database {
         return new ArrayList<>(List.of(0.0, 0.0));
     }
 
+    /**
+     * Performs a query to get the percentage of graduations for a certain sex.
+     * @param s the {@link cgroup2.cadmycode.user.Sex} to check for
+     * @return 0 if no enrollments, otherwise the percentage from 0 to 100
+     */
     public static double getPercentageOfCourseCompletionBySex(Sex s) {
         try {
             PreparedStatement countEnrollments = databaseConnection.prepareStatement(
                 "SELECT COUNT(*) AS enrolled\n"+
-                "FROM Enrollment\n" +
+                "FROM Enrollment\n"+
                 "JOIN CMCUser on Enrollment.userID=CMCUser.userID\n" +
                 "WHERE sex = ?;"
             );
@@ -755,7 +760,15 @@ public class Database {
             ResultSet enrollmentsResult = countEnrollments.executeQuery();
             ResultSet graduationsResult = countGraduations.executeQuery();
 
-            while (enrollmentsResult.next() && graduationsResult.next()) {
+            // no need for while loop, only one record is returned
+            if (enrollmentsResult.next() && graduationsResult.next()) {
+
+                if (enrollmentsResult.getInt("enrolled") == 0) {
+                    return 0; // if there are no enrollments
+                    // nobody is able to graduate
+                    // ergo return 0;
+                }
+
                 return ((double) graduationsResult.getInt("graduated") / (double) enrollmentsResult.getInt("enrolled")) * 100;
             }
 
@@ -961,6 +974,24 @@ public class Database {
         } catch (SQLException e) {
             SceneManager.showErrorDialog(e.getMessage()+"\nNothing has been changed.");
         }
+    }
+
+    public static double getAverageViewPercentage() {
+        try {
+            PreparedStatement updateViewed = databaseConnection.prepareStatement(
+                    "SELECT AVG(CAST(viewed as FLOAT)) as average\n"+
+                    "FROM ViewedItems;"
+            );
+
+            ResultSet rs = updateViewed.executeQuery();
+            if (rs.next()) {
+                return rs.getFloat("average");
+            }
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage()+"\nNothing has been changed.");
+        }
+
+        return 0;
     }
 
     // viewed items do not need to be deleted by the administrator

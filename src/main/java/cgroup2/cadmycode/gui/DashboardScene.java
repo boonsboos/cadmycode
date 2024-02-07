@@ -21,6 +21,7 @@ public class DashboardScene extends SceneWrapper {
     private final Button user = new Button("User");
     private final Button certificate = new Button("Certificate");
 
+    private final Label averageViews = new Label();
     private final BarChart<String, Number> graduationsBySex;
 
     public DashboardScene(Stage stage) {
@@ -53,6 +54,8 @@ public class DashboardScene extends SceneWrapper {
 
         graduationsBySex.getData().addAll(male, female, unknown);
 
+        averageViews.setText(String.format("Average completion of content: %,.1f%%", Database.getAverageViewPercentage()));
+
         // this should become a list of buttons for the CRUD parts
         VBox v1 = new VBox(webcast, module, user, certificate);
         v1.setSpacing(10);
@@ -63,7 +66,10 @@ public class DashboardScene extends SceneWrapper {
         VBox v2 = new VBox(buttonMenu, about);
         v2.setSpacing(10);
 
-        HBox root = new HBox(v2, graduationsBySex);
+        VBox statsVbox = new VBox(graduationsBySex, averageViews);
+        v2.setSpacing(10);
+
+        HBox root = new HBox(v2, statsVbox);
         root.setSpacing(10);
         root.setPadding(new Insets(10));
 

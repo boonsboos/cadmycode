@@ -24,6 +24,8 @@ public class CertificateEditForm extends SceneWrapper {
 
     private int id = 0;
 
+    private int id = 0;
+
     public CertificateEditForm(Stage stage, Certificate selected) {
         super(stage);
         

@@ -73,4 +73,14 @@ public class Module extends EducationalContent {
     public void setCourseID(int courseID) {
         this.courseID = courseID;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Module{");
+        sb.append("contactName='").append(contactName).append('\'');
+        sb.append(", contactEmail='").append(contactEmail).append('\'');
+        sb.append(", courseID=").append(courseID);
+        sb.append('}');
+        return sb.toString();
+    }
 }

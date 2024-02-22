@@ -5,11 +5,14 @@ import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
 
+import javax.swing.text.View;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** de API van deze klasse is static.
  * een instance maken is niet nodig.
@@ -202,7 +205,7 @@ public class Database {
         Module queries
      */
 
-    public static List<Module> getModules(int offset) {
+    public static List<Module> getModules() {
 
         ArrayList<Module> list = new ArrayList<>();
 
@@ -211,12 +214,8 @@ public class Database {
                 "SELECT *\n"+
                 "FROM Module\n"+
                 "JOIN Content ON Module.contentItemID = Content.contentItemID\n"+
-                "ORDER BY Content.contentItemID ASC\n"+
-                "OFFSET ? ROWS\n"+
-                "FETCH NEXT 15 ROWS ONLY;"
+                "ORDER BY Content.contentItemID ASC;\n"
             );
-
-            selectModules.setInt(1, offset);
 
             ResultSet rs = selectModules.executeQuery();
 
@@ -241,8 +240,41 @@ public class Database {
         return list;
     }
 
-    public static List<Module> getModules() {
-        return getModules(0);
+    public static List<Module> getModulesByCourse(Course course) {
+        ArrayList<Module> list = new ArrayList<>();
+
+        try {
+            PreparedStatement selectModules = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Module\n"+
+                "JOIN Content ON Module.contentItemID = Content.contentItemID\n"+
+                "WHERE courseID = ?\n"+
+                "ORDER BY Content.contentItemID ASC;\n"
+            );
+
+            selectModules.setInt(1, course.getCourseID());
+
+            ResultSet rs = selectModules.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Module(
+                    rs.getInt("contentItemID"),
+                    rs.getString("title"),
+                    rs.getString("abstract"),
+                    rs.getDate("publicationDate").toLocalDate(),
+                    ContentStatus.fromInt(rs.getInt("contentStatus")),
+                    rs.getString("contactName"),
+                    rs.getString("contactEmail"),
+                    rs.getInt("courseID"),
+                    rs.getInt("contentVersion")
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
     }
 
     public static int getModuleContentIdByTitle(String title) throws SQLException {
@@ -306,6 +338,8 @@ public class Database {
     }
 
     public static void update(Module m) {
+
+        System.out.println(m);
         try {
             PreparedStatement updateModule = databaseConnection.prepareStatement(
                 "UPDATE Module\n" +
@@ -392,10 +426,6 @@ public class Database {
     }
 
     public static List<Course> getCourses() {
-        return getCourses(0);
-    }
-
-    public static List<Course> getCourses(int offset) {
 
         ArrayList<Course> list = new ArrayList<>();
 
@@ -403,12 +433,8 @@ public class Database {
             PreparedStatement selectModules = databaseConnection.prepareStatement(
                 "SELECT *\n"+
                 "FROM Course\n"+
-                "ORDER BY courseID ASC\n"+
-                "OFFSET ? ROWS\n"+
-                "FETCH NEXT 15 ROWS ONLY;"
+                "ORDER BY courseID ASC;\n"
             );
-
-            selectModules.setInt(1, offset);
 
             ResultSet rs = selectModules.executeQuery();
 
@@ -488,10 +514,6 @@ public class Database {
     }
 
     public static List<Certificate> getCertificates() {
-        return getCertificates(0);
-    }
-
-    public static List<Certificate> getCertificates(int offset) {
 
         ArrayList<Certificate> list = new ArrayList<>();
 
@@ -499,12 +521,9 @@ public class Database {
             PreparedStatement getCerts = databaseConnection.prepareStatement(
                 "SELECT *\n"+
                 "FROM CMCCertificate\n"+
-                "ORDER BY certificateID ASC\n"+
-                "OFFSET ? ROWS\n"+
-                "FETCH NEXT 15 ROWS ONLY;"
+                "ORDER BY certificateID ASC\n"
             );
 
-            getCerts.setInt(1, offset);
             ResultSet rs = getCerts.executeQuery();
             while (rs.next()) {
                 list.add(new Certificate(
@@ -575,10 +594,6 @@ public class Database {
     }
 
     public static List<User> getUsers() {
-        return getUsers(0);
-    }
-
-    public static List<User> getUsers(int offset) {
 
         ArrayList<User> list = new ArrayList<>();
 
@@ -587,12 +602,8 @@ public class Database {
             PreparedStatement retrieveUsers = databaseConnection.prepareStatement(
                 "SELECT *\n"+
                 "FROM CMCUser\n"+
-                "ORDER BY userID ASC\n"+
-                "OFFSET ? ROWS\n"+
-                "FETCH FIRST 15 ROWS ONLY;"
+                "ORDER BY userID ASC;\n"
             );
-
-            retrieveUsers.setInt(1, offset);
 
             ResultSet rs = retrieveUsers.executeQuery();
             while (rs.next()) {
@@ -844,6 +855,73 @@ public class Database {
         return list;
     }
 
+    public static List<Graduation> getGraduationsOfUser(User user) {
+
+        ArrayList<Graduation> list = new ArrayList<>();
+
+        try {
+            PreparedStatement getGrads = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Graduation\n"+
+                "WHERE userID = ?\n"+
+                "ORDER BY graduationID ASC\n"
+            );
+
+            getGrads.setInt(1, user.getUserID());
+
+            ResultSet rs = getGrads.executeQuery();
+            while (rs.next()) {
+                list.add(new Graduation(
+                    rs.getInt("graduationID"),
+                    rs.getInt("userID"),
+                    rs.getString("grantedBy"),
+                    rs.getInt("grade"),
+                    rs.getInt("certificateID")
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
+    }
+
+    public static Map<Graduation, Certificate> getGraduationsOfUserWithCertificate(User user) {
+
+        HashMap<Graduation, Certificate> map = new HashMap<>();
+
+        try {
+            PreparedStatement getGrads = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Graduation\n"+
+                "JOIN CMCCertificate ON Graduation.certificateID = CMCCertificate.certificateID\n"+
+                "WHERE userID = ?\n"+
+                "ORDER BY graduationID ASC\n"
+            );
+
+            getGrads.setInt(1, user.getUserID());
+
+            ResultSet rs = getGrads.executeQuery();
+            while (rs.next()) {
+                map.put(new Graduation(
+                        rs.getInt("graduationID"),
+                        rs.getInt("userID"),
+                        rs.getString("grantedBy"),
+                        rs.getInt("grade"),
+                        rs.getInt("certificateID")
+                    ),
+                    new Certificate(rs.getString("certificateName"))
+                );
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return map;
+    }
+
     /*
         Enrollment queries
      */
@@ -900,6 +978,36 @@ public class Database {
         return list;
     }
 
+    public static List<Enrollment> getEnrollmentsForUser(User user) {
+
+        ArrayList<Enrollment> list = new ArrayList<>();
+
+        try {
+            PreparedStatement getEnrolls = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Enrollment\n"+
+                "WHERE userID = ?\n"+
+                "ORDER BY enrollmentTime DESC;"
+            );
+
+            getEnrolls.setInt(1, user.getUserID());
+
+            ResultSet rs = getEnrolls.executeQuery();
+            while (rs.next()) {
+                list.add(new Enrollment(
+                    rs.getInt("userID"),
+                    rs.getInt("courseID"),
+                    rs.getTimestamp("enrollmentTime").toLocalDateTime()
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
+    }
+
     // Enrollments do not need to be updated or deleted
 
     /*
@@ -924,23 +1032,14 @@ public class Database {
     }
 
     public static List<ViewedItem> getViewedItems() {
-        return getViewedItems(0);
-    }
-
-    public static List<ViewedItem> getViewedItems(int offset) {
 
         ArrayList<ViewedItem> list = new ArrayList<>();
 
         try {
             PreparedStatement getViewed = databaseConnection.prepareStatement(
                 "SELECT *\n"+
-                "FROM Enrollment\n"+
-                "ORDER BY enrollmentTime DESC\n"+ // show the latest enrollments first
-                "OFFSET ? ROWS\n"+
-                "FETCH FIRST 15 ROWS ONLY"
+                "FROM ViewedItems;\n"
             );
-
-            getViewed.setInt(1, offset);
 
             ResultSet rs = getViewed.executeQuery();
             while (rs.next()) {
@@ -953,6 +1052,60 @@ public class Database {
 
         } catch (SQLException e) {
             SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
+    }
+
+    /**
+     * Fetches the ViewedItem of the provided content items for a specific user.
+     * @param u the user to search for
+     * @param contentItems the list of content items
+     * @return list of {@link cgroup2.cadmycode.user.ViewedItem}
+     */
+    public static List<ViewedItem> getViewedItemOfContentItemByUser(User u, List<? extends EducationalContent> contentItems) {
+
+        if (contentItems.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // convert content item list to ID list string
+        StringBuilder builder = new StringBuilder();
+        builder.append("(");
+
+        for (EducationalContent item : contentItems) {
+            builder.append(item.getContentItemID());
+            builder.append(',');
+        }
+
+        // replace the trailing comma
+        // this is the same as StringBuilder#replace, just slightly more clear
+        builder.deleteCharAt(builder.length()-1);
+        builder.append(")");
+
+        ArrayList<ViewedItem> list = new ArrayList<>();
+
+        try {
+            PreparedStatement getViewed = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM ViewedItems\n"+
+                "WHERE contentItemID IN " + builder + " AND userID = ?;\n" // unable to pass the string builder
+            );
+
+            getViewed.setInt(1, u.getUserID());
+            ResultSet rs = getViewed.executeQuery();
+
+            while (rs.next()) {
+                list.add(new ViewedItem(
+                    rs.getInt("contentItemID"),
+                    rs.getInt("userID"),
+                    rs.getInt("viewed")
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+            e.printStackTrace();
         }
 
         return list;

@@ -4,6 +4,7 @@ public enum SceneType {
     DASHBOARD,
     WEBCAST,
     MODULE,
+    COURSE,
     ABOUT,
     USER,
     CERTIFICATE

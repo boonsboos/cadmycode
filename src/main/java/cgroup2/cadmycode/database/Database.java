@@ -6,13 +6,12 @@ import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
 
 import javax.swing.text.View;
+import javax.xml.transform.Result;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** de API van deze klasse is static.
  * een instance maken is niet nodig.
@@ -452,6 +451,75 @@ public class Database {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
+    }
+
+    /** Returns the average completion of the modules that are part of the course
+     *
+     * @param c the course to get average completion for
+     * @return {@link java.util.Map}<{@link cgroup2.cadmycode.content.Module}, {@link java.lang.Integer}>
+     */
+    public static Map<Module, Integer> getAverageCourseCompletion(Course c) {
+        List<Module> modules = getModulesByCourse(c);
+
+        Map<Module, Integer> map = new HashMap<>();
+
+        for (Module m : modules) {
+            try {
+                PreparedStatement average = databaseConnection.prepareStatement(
+                    "SELECT AVG(viewed) AS average\n"+
+                    "FROM ViewedItems\n"+
+                    "WHERE contentItemID = ?;"
+                );
+
+                average.setInt(1, m.getContentItemID());
+
+                ResultSet rs = average.executeQuery();
+
+                while (rs.next()) {
+                    map.put(m, rs.getInt("average"));
+                }
+
+            } catch (SQLException e) {
+                SceneManager.showErrorDialog(e.getMessage());
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return map;
+    }
+
+    public static List<Course> getCoursesRelatedTo(Course c) {
+        List<Course> list = new ArrayList<>();
+
+        try {
+           PreparedStatement relatedCourses = databaseConnection.prepareStatement(
+               "SELECT TOP 3 *\n"+
+               "FROM Course\n"+
+               "WHERE subj = ? AND courseName <> ?"
+           );
+
+           relatedCourses.setString(1, c.getSubject());
+           relatedCourses.setString(2, c.getCourseName());
+
+           ResultSet rs = relatedCourses.executeQuery();
+
+           while (rs.next()) {
+               list.add(new Course(
+                   rs.getString("courseName"),
+                   rs.getString("subj"),
+                   rs.getString("introductionText"),
+                   rs.getInt("courseID"),
+                   CourseLevel.fromInt(rs.getInt("courseLevel")),
+                   rs.getInt("certificateID")
+               ));
+           }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+            System.out.println(e.getMessage());
         }
 
         return list;

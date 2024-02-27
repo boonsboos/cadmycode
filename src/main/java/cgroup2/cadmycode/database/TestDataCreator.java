@@ -4,6 +4,7 @@ import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.user.*;
 
+import javax.xml.crypto.Data;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -96,7 +97,7 @@ public class TestDataCreator {
          Webcasts
         */
         Database.create(new Webcast(
-            "Wat", "by Destroy All Software", LocalDate.of(2012, 5, 2), ContentStatus.ACTIVE,
+            "Wat", "Talk by Destroy All Software", LocalDate.of(2012, 5, 2), ContentStatus.ACTIVE,
             257, "https://www.destroyallsoftware.com/talks/wat", "Gary Bernhardt", "Destroy All Software"
         ));
         Database.create(new Webcast(
@@ -194,6 +195,12 @@ public class TestDataCreator {
         Database.create(new User(
             "Felix Baeten", "fb99fire@joobiden.nl", "Lange Poten 18", "NL", "Den Haag", LocalDate.of(1999, 7, 2), Sex.MALE
         ));
+        Database.create(new User(
+            "Felenov", "felenov@pipebomb.org", "Voorstraat 12", "NL", "Sneek", LocalDate.of(1983, 3, 12), Sex.UNKNOWN
+        ));
+        Database.create(new User(
+            "Iris Peeters", "iris2344@fortnitebattlepass.nl", "Kerkring 4", "NL", "Groningen", LocalDate.of(2003, 5, 29), Sex.FEMALE
+        ));
 
         /*
          Enrollments
@@ -234,6 +241,9 @@ public class TestDataCreator {
 
         if (bobenismCertID == 0) return;
         Database.create(new Graduation(boonsID, "boons", 8, bobenismCertID));
+        Database.create(new Graduation(4, "boons", 6, bobenismCertID));
+        Database.create(new Graduation(5, "boons", 7, 3));
+        Database.create(new Graduation(4, "boons", 10, 2));
 
         System.out.println("Complete!");
     }

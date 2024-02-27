@@ -36,6 +36,7 @@ public class UserScene extends SceneWrapper {
     private Button edit = new Button("Edit user");
     private Button delete = new Button("Delete user");
     private Button refresh = new Button("Refresh");
+    private Button stats = new Button("Statistics");
     private TableView<User> userTable = new TableView<>();
 
     private TableColumn<User, Integer> attributeUserId = new TableColumn<>("UserId");
@@ -48,7 +49,7 @@ public class UserScene extends SceneWrapper {
     private TableColumn<User, Sex> attributeSex = new TableColumn<>("Sex");
     public  UserScene(Stage stage){
         super(stage);
-        stage.setTitle("Users");
+
         attributeUserId.setCellValueFactory(new PropertyValueFactory<>("UserID"));
         attributeEmail.setCellValueFactory(new PropertyValueFactory<>("Email"));
         attributeName.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -68,7 +69,7 @@ public class UserScene extends SceneWrapper {
             attributeDateOfBirth,
             attributeSex
         );
-        VBox v1 = new VBox(create, edit, delete);
+        VBox v1 = new VBox(create, edit, delete, stats);
         v1.setSpacing(10.0);
 
         VBox v2 = new VBox(home, refresh);
@@ -83,6 +84,7 @@ public class UserScene extends SceneWrapper {
         edit.setOnMouseClicked(this::onEditButtonPressed);
         delete.setOnMouseClicked(this::onDeleteButtonPressed);
         home.setOnMouseClicked(this::onHomeButtonPressed);
+        stats.setOnMouseClicked(this::onStatsButtonPressed);
 
         loadData(new Event(EventType.ROOT));
 
@@ -135,5 +137,20 @@ public class UserScene extends SceneWrapper {
 
     private void onHomeButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);
+    }
+
+    private void onStatsButtonPressed(Event e) {
+        if (userTable.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(stage);
+
+        // shows the deletion popup
+        new UserStatisticsView(dialog, userTable.getSelectionModel().getSelectedItem()).show();
+
+        dialog.show();
     }
 }

@@ -22,4 +22,9 @@ public class Certificate {
     public String getCertificateName() {
         return certificateName;
     }
+
+    @Override
+    public String toString() {
+        return this.getCertificateName();
+    }
 }

@@ -5,11 +5,14 @@ import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
 
+import javax.swing.text.View;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /** de API van deze klasse is static.
  * een instance maken is niet nodig.
@@ -124,16 +127,16 @@ public class Database {
 
             while (rs.next()) {
                 list.add(new Webcast(
-                        rs.getInt("contentItemID"),
-                        rs.getString("title"),
-                        rs.getString("abstract"),
-                        rs.getDate("publicationDate").toLocalDate(),
-                        ContentStatus.fromInt(rs.getInt("contentStatus")),
-                        rs.getInt("contentLength"),
-                        rs.getString("webAddress"),
-                        rs.getString("speaker"),
-                        rs.getString("organisation")
-                ));
+                    rs.getInt("contentItemID"),
+                    rs.getString("title"),
+                    rs.getString("abstract"),
+                    rs.getDate("publicationDate").toLocalDate(),
+                    ContentStatus.fromInt(rs.getInt("contentStatus")),
+                    rs.getInt("contentLength"),
+                    rs.getString("webAddress"),
+                    rs.getString("speaker"),
+                    rs.getString("organisation")
+            ));
             }
 
         } catch (SQLException e) {
@@ -146,8 +149,8 @@ public class Database {
     public static void delete(Webcast w) {
         try {
             PreparedStatement deleteWebcast = databaseConnection.prepareStatement(
-                    "DELETE FROM Webcast\n" +
-                    "WHERE Webcast.contentItemID = ?;"
+                "DELETE FROM Webcast\n" +
+                "WHERE Webcast.contentItemID = ?;"
             );
 
             deleteWebcast.setInt(1, w.getContentItemID());
@@ -162,21 +165,21 @@ public class Database {
             int id = getWebcastContentIdByTitle(w.getTitle());
 
             PreparedStatement updateWebcast = databaseConnection.prepareStatement(
-                    "UPDATE Webcast\n" +
-                    "SET contentLength = ?,\n"+
-                    "webAddress = ?,\n"+
-                    "speaker = ?,\n"+
-                    "organisation = ?\n"+
-                    "WHERE contentItemID = ?;"
+                "UPDATE Webcast\n" +
+                "SET contentLength = ?,\n"+
+                "webAddress = ?,\n"+
+                "speaker = ?,\n"+
+                "organisation = ?\n"+
+                "WHERE contentItemID = ?;"
             );
 
             PreparedStatement updateContent = databaseConnection.prepareStatement(
-                    "UPDATE Content\n" +
-                    "SET title = ?,\n"+
-                    "abstract = ?,\n"+
-                    "publicationDate = ?,\n"+
-                    "contentStatus = ?\n"+
-                    "WHERE contentItemID = ?;"
+                "UPDATE Content\n" +
+                "SET title = ?,\n"+
+                "abstract = ?,\n"+
+                "publicationDate = ?,\n"+
+                "contentStatus = ?\n"+
+                "WHERE contentItemID = ?;"
             );
 
             updateWebcast.setInt(1, w.getLength());
@@ -202,7 +205,7 @@ public class Database {
         Module queries
      */
 
-    public static List<Module> getModules(int offset) {
+    public static List<Module> getModules() {
 
         ArrayList<Module> list = new ArrayList<>();
 
@@ -211,12 +214,8 @@ public class Database {
                 "SELECT *\n"+
                 "FROM Module\n"+
                 "JOIN Content ON Module.contentItemID = Content.contentItemID\n"+
-                "ORDER BY Content.contentItemID ASC\n"+
-                "OFFSET ? ROWS\n"+
-                "FETCH NEXT 15 ROWS ONLY;"
+                "ORDER BY Content.contentItemID ASC;\n"
             );
-
-            selectModules.setInt(1, offset);
 
             ResultSet rs = selectModules.executeQuery();
 
@@ -241,8 +240,41 @@ public class Database {
         return list;
     }
 
-    public static List<Module> getModules() {
-        return getModules(0);
+    public static List<Module> getModulesByCourse(Course course) {
+        ArrayList<Module> list = new ArrayList<>();
+
+        try {
+            PreparedStatement selectModules = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Module\n"+
+                "JOIN Content ON Module.contentItemID = Content.contentItemID\n"+
+                "WHERE courseID = ?\n"+
+                "ORDER BY Content.contentItemID ASC;\n"
+            );
+
+            selectModules.setInt(1, course.getCourseID());
+
+            ResultSet rs = selectModules.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Module(
+                    rs.getInt("contentItemID"),
+                    rs.getString("title"),
+                    rs.getString("abstract"),
+                    rs.getDate("publicationDate").toLocalDate(),
+                    ContentStatus.fromInt(rs.getInt("contentStatus")),
+                    rs.getString("contactName"),
+                    rs.getString("contactEmail"),
+                    rs.getInt("courseID"),
+                    rs.getInt("contentVersion")
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
     }
 
     public static int getModuleContentIdByTitle(String title) throws SQLException {
@@ -306,22 +338,24 @@ public class Database {
     }
 
     public static void update(Module m) {
+
+        System.out.println(m);
         try {
             PreparedStatement updateModule = databaseConnection.prepareStatement(
-                    "UPDATE Module\n" +
-                    "SET contactName = ?,\n"+
-                    "courseID = ?,\n"+
-                    "contactEmail = ?\n"+
-                    "WHERE contentItemID = ?;"
+                "UPDATE Module\n" +
+                "SET contactName = ?,\n"+
+                "courseID = ?,\n"+
+                "contactEmail = ?\n"+
+                "WHERE contentItemID = ?;"
             );
 
             PreparedStatement updateContent = databaseConnection.prepareStatement(
-                    "UPDATE Content\n" +
-                    "SET title = ?,\n"+
-                    "abstract = ?,\n"+
-                    "publicationDate = ?,\n"+
-                    "contentStatus = ?\n"+
-                    "WHERE contentItemID = ?;"
+                "UPDATE Content\n" +
+                "SET title = ?,\n"+
+                "abstract = ?,\n"+
+                "publicationDate = ?,\n"+
+                "contentStatus = ?\n"+
+                "WHERE contentItemID = ?;"
             );
 
             updateModule.setString(1, m.getContactName());
@@ -346,8 +380,8 @@ public class Database {
     public static void delete(Module m) {
         try {
             PreparedStatement deleteModule = databaseConnection.prepareStatement(
-                    "DELETE FROM Module\n" +
-                    "WHERE Module.contentItemID = ?;"
+                "DELETE FROM Module\n" +
+                "WHERE Module.contentItemID = ?;"
             );
 
             deleteModule.setInt(1, m.getContentItemID());
@@ -364,8 +398,8 @@ public class Database {
     public static void create(Course c) {
         try {
             PreparedStatement insertInCourse = databaseConnection.prepareStatement(
-                    "INSERT INTO Course (courseName, subj, introductionText, courseLevel, certificateID)\n"+
-                    "VALUES (?, ?, ?, ?, ?);"
+                "INSERT INTO Course (courseName, subj, introductionText, courseLevel, certificateID)\n"+
+                "VALUES (?, ?, ?, ?, ?);"
             );
 
             insertInCourse.setString(1, c.getCourseName());
@@ -392,23 +426,15 @@ public class Database {
     }
 
     public static List<Course> getCourses() {
-        return getCourses(0);
-    }
-
-    public static List<Course> getCourses(int offset) {
 
         ArrayList<Course> list = new ArrayList<>();
 
         try {
             PreparedStatement selectModules = databaseConnection.prepareStatement(
-                    "SELECT *\n"+
-                    "FROM Course\n"+
-                    "ORDER BY courseID ASC\n"+
-                    "OFFSET ? ROWS\n"+
-                    "FETCH NEXT 15 ROWS ONLY;"
+                "SELECT *\n"+
+                "FROM Course\n"+
+                "ORDER BY courseID ASC;\n"
             );
-
-            selectModules.setInt(1, offset);
 
             ResultSet rs = selectModules.executeQuery();
 
@@ -434,13 +460,13 @@ public class Database {
     public static void update(Course c) {
         try {
             PreparedStatement updateCourse = databaseConnection.prepareStatement(
-                    "UPDATE Course\n"+
-                    "SET courseLevel = ?,\n"+
-                    "introductionText = ?,\n"+
-                    "subj = ?,\n"+
-                    "courseName = ?,\n"+
-                    "certificateID = ?\n"+
-                    "WHERE courseID = ?;"
+                "UPDATE Course\n"+
+                "SET courseLevel = ?,\n"+
+                "introductionText = ?,\n"+
+                "subj = ?,\n"+
+                "courseName = ?,\n"+
+                "certificateID = ?\n"+
+                "WHERE courseID = ?;"
             );
 
             updateCourse.setInt(1, c.getLevel().asInt());
@@ -458,8 +484,8 @@ public class Database {
     public static void delete(Course c) {
         try {
             PreparedStatement deleteCourse = databaseConnection.prepareStatement(
-                    "DELETE FROM Course\n"+
-                    "WHERE courseID = ?;"
+                "DELETE FROM Course\n"+
+                "WHERE courseID = ?;"
             );
 
             deleteCourse.setInt(1, c.getCourseID());
@@ -476,8 +502,8 @@ public class Database {
     public static void create(Certificate c) {
         try {
             PreparedStatement createCertificate = databaseConnection.prepareStatement(
-                    "INSERT INTO CMCCertificate (certificateName)\n"+
-                    "VALUES (?);" // wow
+                "INSERT INTO CMCCertificate (certificateName)\n"+
+                "VALUES (?);" // wow
             );
 
             createCertificate.setString(1, c.getCertificateName());
@@ -488,28 +514,21 @@ public class Database {
     }
 
     public static List<Certificate> getCertificates() {
-        return getCertificates(0);
-    }
-
-    public static List<Certificate> getCertificates(int offset) {
 
         ArrayList<Certificate> list = new ArrayList<>();
 
         try {
             PreparedStatement getCerts = databaseConnection.prepareStatement(
-                    "SELECT *\n"+
-                    "FROM CMCCertificate\n"+
-                    "ORDER BY certificateID ASC\n"+
-                    "OFFSET ? ROWS\n"+
-                    "FETCH NEXT 15 ROWS ONLY;"
+                "SELECT *\n"+
+                "FROM CMCCertificate\n"+
+                "ORDER BY certificateID ASC\n"
             );
 
-            getCerts.setInt(1, offset);
             ResultSet rs = getCerts.executeQuery();
             while (rs.next()) {
                 list.add(new Certificate(
-                        rs.getInt("certificateID"),
-                        rs.getString("certificateName")
+                    rs.getInt("certificateID"),
+                    rs.getString("certificateName")
                 ));
             }
 
@@ -523,9 +542,9 @@ public class Database {
     public static void update(Certificate c) {
         try {
             PreparedStatement updateCert = databaseConnection.prepareStatement(
-                    "UPDATE CMCCertificate\n"+
-                    "SET certificateName = ?\n"+
-                    "WHERE certificateID = ?;"
+                "UPDATE CMCCertificate\n"+
+                "SET certificateName = ?\n"+
+                "WHERE certificateID = ?;"
             );
 
             updateCert.setString(1, c.getCertificateName());
@@ -539,8 +558,8 @@ public class Database {
     public static void delete(Certificate c) {
         try {
             PreparedStatement deleteCert = databaseConnection.prepareStatement(
-                    "DELETE FROM CMCCertificate\n"+
-                    "WHERE certificateID = ?;"
+                "DELETE FROM CMCCertificate\n"+
+                "WHERE certificateID = ?;"
             );
 
             deleteCert.setInt(1, c.getCertificateID());
@@ -557,8 +576,8 @@ public class Database {
     public static void create(User u) {
         try {
             PreparedStatement createUser = databaseConnection.prepareStatement(
-                    "INSERT INTO CMCUser (username, email, adres, country, city, dateOfBirth, sex)\n"+
-                    "VALUES (?, ?, ?, ?, ?, ?, ?);"
+                "INSERT INTO CMCUser (username, email, adres, country, city, dateOfBirth, sex)\n"+
+                "VALUES (?, ?, ?, ?, ?, ?, ?);"
             );
 
             createUser.setString(1, u.getName());
@@ -575,36 +594,28 @@ public class Database {
     }
 
     public static List<User> getUsers() {
-        return getUsers(0);
-    }
-
-    public static List<User> getUsers(int offset) {
 
         ArrayList<User> list = new ArrayList<>();
 
         try {
             // avoiding naming conflicts like a pro
             PreparedStatement retrieveUsers = databaseConnection.prepareStatement(
-                    "SELECT *\n"+
-                    "FROM CMCUser\n"+
-                    "ORDER BY userID ASC\n"+
-                    "OFFSET ? ROWS\n"+
-                    "FETCH FIRST 15 ROWS ONLY;"
+                "SELECT *\n"+
+                "FROM CMCUser\n"+
+                "ORDER BY userID ASC;\n"
             );
-
-            retrieveUsers.setInt(1, offset);
 
             ResultSet rs = retrieveUsers.executeQuery();
             while (rs.next()) {
                 list.add(new User(
-                        rs.getInt("userID"),
-                        rs.getString("username"),
-                        rs.getString("email"),
-                        rs.getString("adres"),
-                        rs.getString("country"),
-                        rs.getString("city"),
-                        rs.getDate("dateOfBirth").toLocalDate(),
-                        Sex.fromInt(rs.getInt("sex"))
+                    rs.getInt("userID"),
+                    rs.getString("username"),
+                    rs.getString("email"),
+                    rs.getString("adres"),
+                    rs.getString("country"),
+                    rs.getString("city"),
+                    rs.getDate("dateOfBirth").toLocalDate(),
+                    Sex.fromInt(rs.getInt("sex"))
                 ));
             }
         } catch (SQLException e) {
@@ -617,14 +628,14 @@ public class Database {
     public static void update(User u) {
         try {
             PreparedStatement updateUser = databaseConnection.prepareStatement(
-                    "UPDATE CMCUser\n"+
-                    "SET username = ?,\n"+
-                    "email = ?,\n"+
-                    "adres = ?,\n"+
-                    "country = ?,\n"+
-                    "city = ?,\n"+
-                    "sex = ?\n"+
-                    "WHERE userID = ?;"
+                "UPDATE CMCUser\n"+
+                "SET username = ?,\n"+
+                "email = ?,\n"+
+                "adres = ?,\n"+
+                "country = ?,\n"+
+                "city = ?,\n"+
+                "sex = ?\n"+
+                "WHERE userID = ?;"
             );
 
             updateUser.setString(1, u.getName());
@@ -644,8 +655,8 @@ public class Database {
     public static void delete(User u) {
         try {
             PreparedStatement deleteUser = databaseConnection.prepareStatement(
-                    "DELETE FROM CMCUser\n"+
-                    "WHERE userID = ?;"
+                "DELETE FROM CMCUser\n"+
+                "WHERE userID = ?;"
             ); // this should all be set to cascade
 
             deleteUser.setInt(1, u.getUserID());
@@ -655,6 +666,133 @@ public class Database {
         }
     }
 
+    /**
+     * Gets the percentage of courses that a user has graduated.
+     *  formulas:
+     *  <ul>
+     *  <li>grad / enroll * 100%</li>
+     *  <li>(enroll - grad) / enroll * 100%</li>
+     *  </ul>
+     * @param u the User to get the percentage of
+     * @return {@link:java.util.List} of {@link:java.lang.Double} with size 2.
+     */
+    public static List<Double> getPercentageOfCompletedCourses(User u) {
+        try {
+            PreparedStatement countEnrollments = databaseConnection.prepareStatement(
+                "SELECT COUNT(certificateID) AS enrolled\n"+
+                "FROM Course\n"+
+                "WHERE courseID IN (\n"+
+                    "SELECT courseID\n"+
+                    "FROM Enrollment\n"+
+                    "WHERE userID = ?\n"+
+                ");"
+            );
+
+            countEnrollments.setInt(1, u.getUserID());
+            ResultSet enrollmentsResult = countEnrollments.executeQuery();
+
+            PreparedStatement countGraduations = databaseConnection.prepareStatement(
+                "SELECT COUNT(certificateID) AS graduated\n"+
+                "FROM Graduation\n"+
+                "WHERE userID = ?;\n"
+            );
+
+            countGraduations.setInt(1, u.getUserID());
+            ResultSet graduationsResult = countGraduations.executeQuery();
+            while (enrollmentsResult.next() && graduationsResult.next()) {
+                return new ArrayList<>(List.of(
+                        (double) graduationsResult.getInt("graduated") / (double) enrollmentsResult.getInt("enrolled") * 100,
+                        (double) (enrollmentsResult.getInt("enrolled") - graduationsResult.getInt("graduated")) / (double) enrollmentsResult.getInt("enrolled") * 100
+                ));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            SceneManager.showErrorDialog(e.getMessage()+"\nData temporarily unavailable.");
+        }
+
+        return new ArrayList<>(List.of(0.0, 0.0));
+    }
+
+    public static List<Double> getPercentageOfCourseCompletion() {
+        try {
+            PreparedStatement countEnrollments = databaseConnection.prepareStatement(
+                "SELECT COUNT(*) AS enrolled\n"+
+                "FROM Enrollment;"
+            );
+
+            PreparedStatement countGraduations = databaseConnection.prepareStatement(
+                "SELECT COUNT(*) AS graduated\n"+
+                "FROM Graduation;"
+            );
+
+            ResultSet enrollmentsResult = countEnrollments.executeQuery();
+            ResultSet graduationsResult = countGraduations.executeQuery();
+
+            while (enrollmentsResult.next() && graduationsResult.next()) {
+                return new ArrayList<>(List.of(
+                    (double) graduationsResult.getInt("graduated") / (double) enrollmentsResult.getInt("enrolled") * 100,
+                    (double) (enrollmentsResult.getInt("enrolled") - graduationsResult.getInt("graduated")) / (double) enrollmentsResult.getInt("enrolled") * 100
+                ));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            SceneManager.showErrorDialog(e.getMessage()+"\nData temporarily unavailable.");
+        }
+
+        return new ArrayList<>(List.of(0.0, 0.0));
+    }
+
+    /**
+     * Performs a query to get the percentage of graduations for a certain sex.
+     * @param s the {@link cgroup2.cadmycode.user.Sex} to check for
+     * @return 0 if no enrollments, otherwise the percentage from 0 to 100
+     */
+    public static double getPercentageOfCourseCompletionBySex(Sex s) {
+        try {
+            PreparedStatement countEnrollments = databaseConnection.prepareStatement(
+                "SELECT COUNT(*) AS enrolled\n"+
+                "FROM Enrollment\n"+
+                "JOIN CMCUser on Enrollment.userID=CMCUser.userID\n" +
+                "WHERE sex = ?;"
+            );
+
+            PreparedStatement countGraduations = databaseConnection.prepareStatement(
+                "SELECT COUNT(*) AS graduated\n"+
+                "FROM Graduation\n" +
+                "JOIN CMCUser on Graduation.userID=CMCUser.userID\n" +
+                "WHERE sex = ?;"
+            );
+
+            countEnrollments.setInt(1, s.asInt());
+            countGraduations.setInt(1, s.asInt());
+
+            ResultSet enrollmentsResult = countEnrollments.executeQuery();
+            ResultSet graduationsResult = countGraduations.executeQuery();
+
+            // no need for while loop, only one record is returned
+            if (enrollmentsResult.next() && graduationsResult.next()) {
+
+                if (enrollmentsResult.getInt("enrolled") == 0) {
+                    return 0; // if there are no enrollments
+                    // nobody is able to graduate
+                    // ergo return 0;
+                }
+
+                return ((double) graduationsResult.getInt("graduated") / (double) enrollmentsResult.getInt("enrolled")) * 100;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e);
+            SceneManager.showErrorDialog(e.getMessage()+"\nData on sex-specific course completion temporarily unavailable.");
+        }
+
+        return Double.NEGATIVE_INFINITY;
+    }
+
+
     /*
         Graduation queries
      */
@@ -662,8 +800,8 @@ public class Database {
     public static void create(Graduation g) {
         try {
             PreparedStatement createGraduation = databaseConnection.prepareStatement(
-                    "INSERT INTO Graduation (userID, certificateID, grantedBy, grade)\n"+
-                    "VALUES (?, ?, ?, ?);"
+                "INSERT INTO Graduation (userID, certificateID, grantedBy, grade)\n"+
+                "VALUES (?, ?, ?, ?);"
             );
 
             createGraduation.setInt(1, g.getUserID());
@@ -690,11 +828,11 @@ public class Database {
 
         try {
             PreparedStatement getGrads = databaseConnection.prepareStatement(
-                    "SELECT *\n"+
-                    "FROM Graduation\n"+
-                    "ORDER BY graduationID ASC\n"+
-                    "OFFSET ? ROWS\n"+
-                    "FETCH FIRST 15 ROWS ONLY"
+                "SELECT *\n"+
+                "FROM Graduation\n"+
+                "ORDER BY graduationID ASC\n"+
+                "OFFSET ? ROWS\n"+
+                "FETCH FIRST 15 ROWS ONLY"
             );
 
             getGrads.setInt(1, offset);
@@ -702,11 +840,11 @@ public class Database {
             ResultSet rs = getGrads.executeQuery();
             while (rs.next()) {
                 list.add(new Graduation(
-                        rs.getInt("graduationID"),
-                        rs.getInt("userID"),
-                        rs.getString("grantedBy"),
-                        rs.getInt("grade"),
-                        rs.getInt("certificateID")
+                    rs.getInt("graduationID"),
+                    rs.getInt("userID"),
+                    rs.getString("grantedBy"),
+                    rs.getInt("grade"),
+                    rs.getInt("certificateID")
                 ));
             }
 
@@ -717,6 +855,73 @@ public class Database {
         return list;
     }
 
+    public static List<Graduation> getGraduationsOfUser(User user) {
+
+        ArrayList<Graduation> list = new ArrayList<>();
+
+        try {
+            PreparedStatement getGrads = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Graduation\n"+
+                "WHERE userID = ?\n"+
+                "ORDER BY graduationID ASC\n"
+            );
+
+            getGrads.setInt(1, user.getUserID());
+
+            ResultSet rs = getGrads.executeQuery();
+            while (rs.next()) {
+                list.add(new Graduation(
+                    rs.getInt("graduationID"),
+                    rs.getInt("userID"),
+                    rs.getString("grantedBy"),
+                    rs.getInt("grade"),
+                    rs.getInt("certificateID")
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
+    }
+
+    public static Map<Graduation, Certificate> getGraduationsOfUserWithCertificate(User user) {
+
+        HashMap<Graduation, Certificate> map = new HashMap<>();
+
+        try {
+            PreparedStatement getGrads = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Graduation\n"+
+                "JOIN CMCCertificate ON Graduation.certificateID = CMCCertificate.certificateID\n"+
+                "WHERE userID = ?\n"+
+                "ORDER BY graduationID ASC\n"
+            );
+
+            getGrads.setInt(1, user.getUserID());
+
+            ResultSet rs = getGrads.executeQuery();
+            while (rs.next()) {
+                map.put(new Graduation(
+                        rs.getInt("graduationID"),
+                        rs.getInt("userID"),
+                        rs.getString("grantedBy"),
+                        rs.getInt("grade"),
+                        rs.getInt("certificateID")
+                    ),
+                    new Certificate(rs.getString("certificateName"))
+                );
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return map;
+    }
+
     /*
         Enrollment queries
      */
@@ -724,8 +929,8 @@ public class Database {
     public static void create(Enrollment e) {
         try {
             PreparedStatement createEnroll = databaseConnection.prepareStatement(
-                    "INSERT INTO Enrollment (userID, courseID, enrollmentTime)\n"+
-                    "VALUES (?, ?, ?)"
+                "INSERT INTO Enrollment (userID, courseID, enrollmentTime)\n"+
+                "VALUES (?, ?, ?)"
             );
 
             createEnroll.setInt(1, e.getUserID());
@@ -748,11 +953,11 @@ public class Database {
 
         try {
             PreparedStatement getEnrolls = databaseConnection.prepareStatement(
-                    "SELECT *\n"+
-                    "FROM Enrollment\n"+
-                    "ORDER BY enrollmentTime DESC\n"+ // show the latest enrollments first
-                    "OFFSET ? ROWS\n"+
-                    "FETCH FIRST 15 ROWS ONLY"
+                "SELECT *\n"+
+                "FROM Enrollment\n"+
+                "ORDER BY enrollmentTime DESC\n"+ // show the latest enrollments first
+                "OFFSET ? ROWS\n"+
+                "FETCH FIRST 15 ROWS ONLY"
             );
 
             getEnrolls.setInt(1, offset);
@@ -760,9 +965,39 @@ public class Database {
             ResultSet rs = getEnrolls.executeQuery();
             while (rs.next()) {
                 list.add(new Enrollment(
-                        rs.getInt("userID"),
-                        rs.getInt("courseID"),
-                        rs.getTimestamp("enrollmentTime").toLocalDateTime()
+                    rs.getInt("userID"),
+                    rs.getInt("courseID"),
+                    rs.getTimestamp("enrollmentTime").toLocalDateTime()
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return list;
+    }
+
+    public static List<Enrollment> getEnrollmentsForUser(User user) {
+
+        ArrayList<Enrollment> list = new ArrayList<>();
+
+        try {
+            PreparedStatement getEnrolls = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM Enrollment\n"+
+                "WHERE userID = ?\n"+
+                "ORDER BY enrollmentTime DESC;"
+            );
+
+            getEnrolls.setInt(1, user.getUserID());
+
+            ResultSet rs = getEnrolls.executeQuery();
+            while (rs.next()) {
+                list.add(new Enrollment(
+                    rs.getInt("userID"),
+                    rs.getInt("courseID"),
+                    rs.getTimestamp("enrollmentTime").toLocalDateTime()
                 ));
             }
 
@@ -782,8 +1017,8 @@ public class Database {
     public static void create(ViewedItem v) {
         try {
             PreparedStatement createViewed = databaseConnection.prepareStatement(
-                    "INSERT INTO ViewedItems (contentItemID, userID, viewed)\n"+
-                    "VALUES (?, ?, ?);"
+                "INSERT INTO ViewedItems (contentItemID, userID, viewed)\n"+
+                "VALUES (?, ?, ?);"
             );
 
             createViewed.setInt(1, v.getContentItemID());
@@ -797,30 +1032,21 @@ public class Database {
     }
 
     public static List<ViewedItem> getViewedItems() {
-        return getViewedItems(0);
-    }
-
-    public static List<ViewedItem> getViewedItems(int offset) {
 
         ArrayList<ViewedItem> list = new ArrayList<>();
 
         try {
             PreparedStatement getViewed = databaseConnection.prepareStatement(
-                    "SELECT *\n"+
-                    "FROM Enrollment\n"+
-                    "ORDER BY enrollmentTime DESC\n"+ // show the latest enrollments first
-                    "OFFSET ? ROWS\n"+
-                    "FETCH FIRST 15 ROWS ONLY"
+                "SELECT *\n"+
+                "FROM ViewedItems;\n"
             );
-
-            getViewed.setInt(1, offset);
 
             ResultSet rs = getViewed.executeQuery();
             while (rs.next()) {
                 list.add(new ViewedItem(
-                        rs.getInt("contentItemID"),
-                        rs.getInt("userID"),
-                        rs.getInt("viewed")
+                    rs.getInt("contentItemID"),
+                    rs.getInt("userID"),
+                    rs.getInt("viewed")
                 ));
             }
 
@@ -831,13 +1057,67 @@ public class Database {
         return list;
     }
 
+    /**
+     * Fetches the ViewedItem of the provided content items for a specific user.
+     * @param u the user to search for
+     * @param contentItems the list of content items
+     * @return list of {@link cgroup2.cadmycode.user.ViewedItem}
+     */
+    public static List<ViewedItem> getViewedItemOfContentItemByUser(User u, List<? extends EducationalContent> contentItems) {
+
+        if (contentItems.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // convert content item list to ID list string
+        StringBuilder builder = new StringBuilder();
+        builder.append("(");
+
+        for (EducationalContent item : contentItems) {
+            builder.append(item.getContentItemID());
+            builder.append(',');
+        }
+
+        // replace the trailing comma
+        // this is the same as StringBuilder#replace, just slightly more clear
+        builder.deleteCharAt(builder.length()-1);
+        builder.append(")");
+
+        ArrayList<ViewedItem> list = new ArrayList<>();
+
+        try {
+            PreparedStatement getViewed = databaseConnection.prepareStatement(
+                "SELECT *\n"+
+                "FROM ViewedItems\n"+
+                "WHERE contentItemID IN " + builder + " AND userID = ?;\n" // unable to pass the string builder
+            );
+
+            getViewed.setInt(1, u.getUserID());
+            ResultSet rs = getViewed.executeQuery();
+
+            while (rs.next()) {
+                list.add(new ViewedItem(
+                    rs.getInt("contentItemID"),
+                    rs.getInt("userID"),
+                    rs.getInt("viewed")
+                ));
+            }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public static void update(ViewedItem v) {
         try {
             PreparedStatement updateViewed = databaseConnection.prepareStatement(
-                    "UPDATE ViewedItems\n"+
-                    "SET viewed = ?\n"+
-                    "WHERE contentItemID = ?\n"+
-                    "AND userID = ?;"
+                "UPDATE ViewedItems\n"+
+                "SET viewed = ?\n"+
+                "WHERE contentItemID = ?\n"+
+                "AND userID = ?;"
             );
 
             updateViewed.setInt(1, v.getViewed());
@@ -849,6 +1129,25 @@ public class Database {
         }
     }
 
+    public static double getAverageViewPercentage() {
+        try {
+            PreparedStatement updateViewed = databaseConnection.prepareStatement(
+                    "SELECT AVG(CAST(viewed as FLOAT)) as average\n"+
+                    "FROM ViewedItems;"
+            );
+
+            ResultSet rs = updateViewed.executeQuery();
+            if (rs.next()) {
+                return rs.getFloat("average");
+            }
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage()+"\nNothing has been changed.");
+        }
+
+        return 0;
+    }
+
     // viewed items do not need to be deleted by the administrator
     // as when a user is deleted, the record cascades.
+
 }

@@ -644,7 +644,7 @@ public class Database {
     public static void create(User u) {
         try {
             PreparedStatement createUser = databaseConnection.prepareStatement(
-                "INSERT INTO CMCUser (username, email, adres, country, city, dateOfBirth, sex)\n"+
+                "INSERT INTO CMCUser (username, email, adres, country, houseNumber, dateOfBirth, sex)\n"+
                 "VALUES (?, ?, ?, ?, ?, ?, ?);"
             );
 
@@ -652,7 +652,7 @@ public class Database {
             createUser.setString(2, u.getEmail());
             createUser.setString(3, u.getAddress());
             createUser.setString(4, u.getCountry());
-            createUser.setString(5, u.getCity());
+            createUser.setString(5, u.getHouseNumber());
             createUser.setDate(6, convertLocalDateToSQLDate(u.getDateOfBirth()));
             createUser.setInt(7, u.getSex().asInt());
             createUser.execute();
@@ -681,7 +681,7 @@ public class Database {
                     rs.getString("email"),
                     rs.getString("adres"),
                     rs.getString("country"),
-                    rs.getString("city"),
+                    rs.getString("houseNumber"),
                     rs.getDate("dateOfBirth").toLocalDate(),
                     Sex.fromInt(rs.getInt("sex"))
                 ));
@@ -701,7 +701,7 @@ public class Database {
                 "email = ?,\n"+
                 "adres = ?,\n"+
                 "country = ?,\n"+
-                "city = ?,\n"+
+                "houseNumber = ?,\n"+
                 "sex = ?\n"+
                 "WHERE userID = ?;"
             );
@@ -710,7 +710,7 @@ public class Database {
             updateUser.setString(2, u.getEmail());
             updateUser.setString(3, u.getAddress());
             updateUser.setString(4, u.getCountry());
-            updateUser.setString(5, u.getCity());
+            updateUser.setString(5, u.getHouseNumber());
             updateUser.setInt(6, u.getSex().asInt());
             updateUser.setInt(7, u.getUserID());
             updateUser.execute();

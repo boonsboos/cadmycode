@@ -23,7 +23,7 @@ public class UserEditForm extends SceneWrapper {
     private TextField emailArea = new TextField();
     private TextField addressArea = new TextField();
     private TextField countryArea = new TextField();
-    private TextField cityArea = new TextField();
+    private TextField houseNumberArea = new TextField();
     private DatePicker dateOfBirthArea = new DatePicker();
     private ComboBox<Sex> sexBox = new ComboBox<>(FXCollections.observableArrayList(
             Sex.MALE,
@@ -43,7 +43,7 @@ public class UserEditForm extends SceneWrapper {
         emailArea.setText(selected.getEmail());
         addressArea.setText(selected.getAddress());
         countryArea.setText(selected.getCountry());
-        cityArea.setText(selected.getCity());
+        houseNumberArea.setText(selected.getHouseNumber());
         dateOfBirthArea.setValue(selected.getDateOfBirth());
         sexBox.setValue(selected.getSex());
 
@@ -51,15 +51,15 @@ public class UserEditForm extends SceneWrapper {
         Label email = new Label("Email");
         Label address = new Label("Address");
         Label country = new Label("Country");
-        Label city = new Label("City");
+        Label houseNumber = new Label("houseNumber");
         Label dateOfBirth = new Label("Date of birth");
         Label sex = new Label("Sex");
 
         HBox h1 = new HBox(name, nameArea);
         HBox h2 = new HBox(email, emailArea);
         HBox h3 = new HBox(address, addressArea);
-        HBox h4 = new HBox(country, countryArea);
-        HBox h5 = new HBox(city, cityArea);
+        HBox h4 = new HBox(houseNumber, houseNumberArea);
+        HBox h5 = new HBox(country, countryArea);
         HBox h6 = new HBox(dateOfBirth, dateOfBirthArea);
         HBox h7 = new HBox(sex, sexBox);
         HBox h8 = new HBox(new Label(), submit);
@@ -85,7 +85,7 @@ public class UserEditForm extends SceneWrapper {
                     emailArea.getText(),
                     addressArea.getText(),
                     countryArea.getText(),
-                    cityArea.getText(),
+                    houseNumberArea.getText(),
                     dateOfBirthArea.getValue(),
                     sexBox.getValue()
                 )

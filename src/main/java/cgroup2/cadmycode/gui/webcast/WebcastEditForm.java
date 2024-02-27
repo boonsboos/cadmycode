@@ -42,6 +42,7 @@ public class WebcastEditForm extends SceneWrapper {
 
     public WebcastEditForm(Stage stage, Webcast selected) {
         super(stage);
+        stage.setTitle("edit webcast");
 
         titleField.setText(selected.getTitle());
         descriptionArea.setText(selected.getDescription());

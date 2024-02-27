@@ -41,6 +41,8 @@ public class UserCreationForm extends SceneWrapper {
     private Button submit = new Button("Submit");
     public UserCreationForm(Stage stage){
         super(stage);
+        stage.setTitle("new user");
+
         Label name = new Label("Name");
         Label email = new Label("Email");
         Label address = new Label("Address");

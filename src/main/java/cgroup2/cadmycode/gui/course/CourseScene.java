@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 public class CourseScene extends SceneWrapper {
     private Button home = new Button("Home");
-    private Button create = new Button("+");
+    private Button create = new Button("Register");
     private Button edit = new Button("Edit");
     private Button delete = new Button("Delete");
     private Button refresh = new Button("Refresh");
@@ -53,14 +53,16 @@ public class CourseScene extends SceneWrapper {
                 atributeCertificateID
         );
         courseTable.setMinWidth(1050);
+
         VBox v1 = new VBox(home, refresh);
+        v1.setSpacing(40);
+
         VBox v2 = new VBox(create, edit, delete, stats);
         v2.setSpacing(10);
 
-        HBox h1 = new HBox(v1, courseTable, v2);
-
-        h1.setPadding(new Insets(10.0));
-        h1.setSpacing(10.0);
+        HBox hBox = new HBox(v1, courseTable, v2);
+        hBox.setPadding(new Insets(10));
+        hBox.setSpacing(10);
 
         create.setOnMouseClicked(this::onCreateButtonPressed);
         refresh.setOnMouseClicked(this::loadData);
@@ -72,7 +74,7 @@ public class CourseScene extends SceneWrapper {
         // serialize all the database items and add them to the UI
         loadData(new Event(EventType.ROOT));
 
-        this.scene = new Scene(h1);
+        this.scene = new Scene(hBox);
     }
     public void loadData(Event e) {
         courseTable.setItems(FXCollections.observableArrayList(
@@ -136,4 +138,3 @@ public class CourseScene extends SceneWrapper {
         dialog.show();
     }
 }
-

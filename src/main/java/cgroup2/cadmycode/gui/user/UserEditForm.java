@@ -37,6 +37,7 @@ public class UserEditForm extends SceneWrapper {
 
     public UserEditForm(Stage stage, User selected){
         super(stage);
+        stage.setTitle("edit user");
 
         nameArea.setText(selected.getName());
         emailArea.setText(selected.getEmail());

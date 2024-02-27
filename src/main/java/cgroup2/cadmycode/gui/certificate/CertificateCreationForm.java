@@ -24,6 +24,7 @@ public class CertificateCreationForm extends SceneWrapper {
 
     public CertificateCreationForm(Stage stage) {
         super(stage);
+        stage.setTitle("new certificate");
 
         Label titleLabel = new Label("Name");
 

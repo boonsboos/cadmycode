@@ -1,17 +1,17 @@
 package cgroup2.cadmycode.database;
 
-import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.content.Module;
+import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
 
-import javax.swing.text.View;
-import javax.xml.transform.Result;
 import java.sql.*;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /** de API van deze klasse is static.
  * een instance maken is niet nodig.

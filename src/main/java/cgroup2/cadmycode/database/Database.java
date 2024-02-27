@@ -887,10 +887,6 @@ public class Database {
     // it is instead deleted when a user is deleted
 
     public static List<Graduation> getGraduations() {
-        return getGraduations(0);
-    }
-
-    public static List<Graduation> getGraduations(int offset) {
 
         ArrayList<Graduation> list = new ArrayList<>();
 
@@ -898,12 +894,8 @@ public class Database {
             PreparedStatement getGrads = databaseConnection.prepareStatement(
                 "SELECT *\n"+
                 "FROM Graduation\n"+
-                "ORDER BY graduationID ASC\n"+
-                "OFFSET ? ROWS\n"+
-                "FETCH FIRST 15 ROWS ONLY"
+                "ORDER BY graduationID ASC;"
             );
-
-            getGrads.setInt(1, offset);
 
             ResultSet rs = getGrads.executeQuery();
             while (rs.next()) {
@@ -990,6 +982,32 @@ public class Database {
         return map;
     }
 
+    /**
+     * Gets the amount of graduations of the course
+     * @param c the course
+     * @return the total amount
+     */
+    public static int getTotalGraduationsOfCourse(Course c) {
+        try {
+            PreparedStatement totalGrads = databaseConnection.prepareStatement(
+                "SELECT COUNT(*) as total\n"+
+                "FROM Graduation\n"+
+                "WHERE certificateID = ?"
+            );
+
+            totalGrads.setInt(1, c.getCertificateID());
+
+            ResultSet rs = totalGrads.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return 0;
+    }
+
     /*
         Enrollment queries
      */
@@ -1012,10 +1030,6 @@ public class Database {
     }
 
     public static List<Enrollment> getEnrollments() {
-        return getEnrollments(0);
-    }
-
-    public static List<Enrollment> getEnrollments(int offset) {
 
         ArrayList<Enrollment> list = new ArrayList<>();
 
@@ -1023,12 +1037,8 @@ public class Database {
             PreparedStatement getEnrolls = databaseConnection.prepareStatement(
                 "SELECT *\n"+
                 "FROM Enrollment\n"+
-                "ORDER BY enrollmentTime DESC\n"+ // show the latest enrollments first
-                "OFFSET ? ROWS\n"+
-                "FETCH FIRST 15 ROWS ONLY"
+                "ORDER BY enrollmentTime DESC;" // show the latest enrollments first
             );
-
-            getEnrolls.setInt(1, offset);
 
             ResultSet rs = getEnrolls.executeQuery();
             while (rs.next()) {

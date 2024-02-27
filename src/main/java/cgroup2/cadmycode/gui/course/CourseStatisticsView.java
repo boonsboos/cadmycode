@@ -28,13 +28,19 @@ public class CourseStatisticsView extends SceneWrapper {
     private final Label relatedCourses = new Label();
     private final Label relatedLabel = new Label("Related:");
 
+    private final Label amountOfGrads = new Label();
+    private final Label gradsLabel = new Label("Total graduations:");
+
     public CourseStatisticsView(Stage stage, Course selected) {
         super(stage);
 
         HBox h1 = new HBox(relatedLabel, relatedCourses);
         h1.setSpacing(10);
 
-        VBox root = new VBox(new Label(selected.getCourseName()), progress, h1, close);
+        HBox h2 = new HBox(gradsLabel, amountOfGrads);
+        h2.setSpacing(10);
+
+        VBox root = new VBox(new Label(selected.getCourseName()), progress, h1, h2, close);
         root.setSpacing(20);
         root.setPadding(new Insets(10));
 
@@ -75,5 +81,8 @@ public class CourseStatisticsView extends SceneWrapper {
         }
 
         relatedCourses.setText(sb.toString());
+
+        // populate amount of graduations
+        amountOfGrads.setText(String.valueOf(Database.getTotalGraduationsOfCourse(c)));
     }
 }

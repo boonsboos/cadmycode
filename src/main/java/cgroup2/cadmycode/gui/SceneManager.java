@@ -1,6 +1,7 @@
 package cgroup2.cadmycode.gui;
 
 import cgroup2.cadmycode.gui.certificate.CertificateScene;
+import cgroup2.cadmycode.gui.course.CourseScene;
 import cgroup2.cadmycode.gui.module.ModuleScene;
 import cgroup2.cadmycode.gui.user.UserScene;
 import cgroup2.cadmycode.gui.webcast.WebcastScene;
@@ -32,6 +33,7 @@ public class SceneManager {
         this.scenes = new HashMap<>(Map.ofEntries(
                 Map.entry(SceneType.WEBCAST, new WebcastScene(mainStage)),
                 Map.entry(SceneType.MODULE, new ModuleScene(mainStage)),
+                Map.entry(SceneType.COURSE, new CourseScene(mainStage)),
                 Map.entry(SceneType.DASHBOARD, new DashboardScene(mainStage)),
                 Map.entry(SceneType.ABOUT, new AboutScene(mainStage)),
                 Map.entry(SceneType.USER, new UserScene(mainStage)),

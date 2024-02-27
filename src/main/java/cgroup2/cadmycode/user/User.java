@@ -1,6 +1,7 @@
 package cgroup2.cadmycode.user;
 
 import cgroup2.cadmycode.content.Course;
+import cgroup2.cadmycode.except.FieldValidationException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class User {
      * use 2-letter ISO country codes
      */
     private String country;
-    private String city;
+    private String houseNumber;
     private LocalDate dateOfBirth;
     private Sex sex;
 
@@ -30,7 +31,7 @@ public class User {
                 String email,
                 String address,
                 String country,
-                String city,
+                String houseNumber,
                 LocalDate dateOfBirth,
                 Sex sex
     ) {
@@ -39,7 +40,7 @@ public class User {
         this.email = email;
         this.address = address;
         this.country = country;
-        this.city = city;
+        this.houseNumber = houseNumber;
         this.dateOfBirth = dateOfBirth;
         this.sex = sex;
     }
@@ -48,18 +49,23 @@ public class User {
                 String email,
                 String address,
                 String country,
-                String city,
+                String houseNumber,
                 LocalDate dateOfBirth,
-                Sex sex) {
+                Sex sex) throws FieldValidationException {
+       if (!(checkPostcode(address))){
+           throw new FieldValidationException("postcode onjuist ingevoerd");
+       };
         this.name = name;
         this.email = email;
         this.address = address;
         this.country = country;
-        this.city = city;
+        this.houseNumber = houseNumber;
         this.dateOfBirth = dateOfBirth;
         this.sex = sex;
     }
-
+    public static boolean checkPostcode(String postCode) {
+        return postCode.matches("[1-9]{1}[0-9]{3}[a-zA-Z]{2}");
+    }
     public int getUserID() {
         return userID;
     }
@@ -80,8 +86,8 @@ public class User {
         return country;
     }
 
-    public String getCity() {
-        return city;
+    public String getHouseNumber() {
+        return houseNumber;
     }
 
     public LocalDate getDateOfBirth() {
@@ -108,8 +114,8 @@ public class User {
         this.country = country;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 
     public void setSex(Sex sex) {

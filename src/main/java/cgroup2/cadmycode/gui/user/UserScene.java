@@ -44,7 +44,7 @@ public class UserScene extends SceneWrapper {
     private TableColumn<User, String> attributeName = new TableColumn<>("Name");
     private TableColumn<User, String> attributeAddress = new TableColumn<>("Address");
     private TableColumn<User, String> attributeCountry = new TableColumn<>("Country");
-    private TableColumn<User, String> attributeCity = new TableColumn<>("City");
+    private TableColumn<User, String> attributeHouseNumber = new TableColumn<>("HouseNumber");
     private TableColumn<User, LocalDate> attributeDateOfBirth = new TableColumn<>("Date of birth");
     private TableColumn<User, Sex> attributeSex = new TableColumn<>("Sex");
     public  UserScene(Stage stage){
@@ -55,7 +55,7 @@ public class UserScene extends SceneWrapper {
         attributeName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         attributeAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
         attributeCountry.setCellValueFactory(new PropertyValueFactory<>("Country"));
-        attributeCity.setCellValueFactory(new PropertyValueFactory<>("City"));
+        attributeHouseNumber.setCellValueFactory(new PropertyValueFactory<>("HouseNumber"));
         attributeDateOfBirth.setCellValueFactory(new PropertyValueFactory<>("DateOfBirth"));
         attributeSex.setCellValueFactory(new PropertyValueFactory<>("Sex"));
 
@@ -64,8 +64,8 @@ public class UserScene extends SceneWrapper {
             attributeEmail,
             attributeName,
             attributeAddress,
+            attributeHouseNumber,
             attributeCountry,
-            attributeCity,
             attributeDateOfBirth,
             attributeSex
         );

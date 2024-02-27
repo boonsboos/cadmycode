@@ -2,6 +2,7 @@ package cgroup2.cadmycode.database;
 
 import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.content.Module;
+import cgroup2.cadmycode.except.FieldValidationException;
 import cgroup2.cadmycode.user.*;
 
 import javax.xml.crypto.Data;
@@ -186,22 +187,26 @@ public class TestDataCreator {
         /*
          Users
         */
-        Database.create(new User(
-            "Niels Plug", "niels@joobiden.nl", "P.C. Hooftstraat 1", "NL", "Amsterdam", LocalDate.of(2002, 7, 1), Sex.MALE
-        ));
-        Database.create(new User(
-            "Jonas Dingemans", "boons@boonsboos.nl", "Coolsingel 7", "NL", "Rotterdam", LocalDate.of(2005, 12, 13), Sex.MALE
-        ));
-        Database.create(new User(
-            "Felix Baeten", "fb99fire@joobiden.nl", "Lange Poten 18", "NL", "Den Haag", LocalDate.of(1999, 7, 2), Sex.MALE
-        ));
-        Database.create(new User(
-            "Felenov", "felenov@pipebomb.org", "Voorstraat 12", "NL", "Sneek", LocalDate.of(1983, 3, 12), Sex.UNKNOWN
-        ));
-        Database.create(new User(
-            "Iris Peeters", "iris2344@fortnitebattlepass.nl", "Kerkring 4", "NL", "Groningen", LocalDate.of(2003, 5, 29), Sex.FEMALE
-        ));
+        try {
 
+            Database.create(new User(
+                    "Niels Plug", "niels@joobiden.nl", "1234AB", "NL", "354", LocalDate.of(2002, 7, 1), Sex.MALE
+            ));
+            Database.create(new User(
+                    "Jonas Dingemans", "boons@boonsboos.nl", "2266DE", "NL", "13", LocalDate.of(2005, 12, 13), Sex.MALE
+            ));
+            Database.create(new User(
+                    "Felix Baeten", "fb99fire@joobiden.nl", "4834LE", "NL", "98c", LocalDate.of(1999, 7, 2), Sex.MALE
+            ));
+            Database.create(new User(
+                    "Felenov", "felenov@pipebomb.org", "5167HT", "NL", "4", LocalDate.of(1983, 3, 12), Sex.UNKNOWN
+            ));
+            Database.create(new User(
+                    "Iris Peeters", "iris2344@fortnitebattlepass.nl", "Kerkring 4", "NL", "Groningen", LocalDate.of(2003, 5, 29), Sex.FEMALE
+            ));
+        } catch (FieldValidationException e){
+
+        }
         /*
          Enrollments
         */

@@ -33,6 +33,7 @@ public class CourseEditForm extends SceneWrapper {
 
     public CourseEditForm(Stage stage, Course selected) {
         super(stage);
+        stage.setTitle("edit course");
 
         courseName.setText(selected.getCourseName());
         subject.setText(selected.getSubject());

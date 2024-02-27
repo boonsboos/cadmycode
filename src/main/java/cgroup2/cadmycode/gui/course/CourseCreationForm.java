@@ -32,6 +32,7 @@ public class CourseCreationForm extends SceneWrapper {
 
     public CourseCreationForm(Stage stage) {
         super(stage);
+        stage.setTitle("new course");
         Label courseNameLabel = new Label("courseName");
         Label subjectLabel = new Label("subject");
         Label introductionTextLabel = new Label("introduction");

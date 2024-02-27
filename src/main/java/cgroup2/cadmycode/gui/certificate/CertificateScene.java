@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 
 public class CertificateScene extends SceneWrapper {
     private Button home = new Button("Home");
-    private Button create = new Button("+");
+    private Button create = new Button("Register");
     private Button edit = new Button("Edit");
     private Button delete = new Button("Delete");
     private Button refresh = new Button("Refresh");

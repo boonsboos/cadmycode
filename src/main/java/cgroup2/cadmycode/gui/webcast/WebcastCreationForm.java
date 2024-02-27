@@ -41,6 +41,7 @@ public class WebcastCreationForm extends SceneWrapper {
 
     public WebcastCreationForm(Stage stage) {
         super(stage);
+        stage.setTitle("new webcast");
 
         Label titleLabel = new Label("Title");
         Label descriptionLabel = new Label("Description");

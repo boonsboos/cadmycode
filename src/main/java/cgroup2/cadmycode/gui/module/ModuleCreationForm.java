@@ -37,6 +37,7 @@ public class ModuleCreationForm extends SceneWrapper {
 
     public ModuleCreationForm(Stage stage) {
         super(stage);
+        stage.setTitle("new module");
 
         Label titleLabel = new Label("Title");
         Label descriptionLabel = new Label("Description");

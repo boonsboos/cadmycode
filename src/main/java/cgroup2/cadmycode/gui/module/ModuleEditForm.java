@@ -38,7 +38,8 @@ public class ModuleEditForm extends SceneWrapper {
 
     public ModuleEditForm(Stage stage, Module selected) {
         super(stage);
-
+        stage.setTitle("edit module");
+        
         titleField.setText(selected.getTitle());
         descriptionArea.setText(selected.getDescription());
         publicationDate.setValue(selected.getPublicationDate());

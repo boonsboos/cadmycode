@@ -26,7 +26,7 @@ public class CertificateEditForm extends SceneWrapper {
 
     public CertificateEditForm(Stage stage, Certificate selected) {
         super(stage);
-        
+        stage.setTitle("edit certificate");
         nameField.setText(selected.getCertificateName());
 
         Label titleLabel = new Label("Name");

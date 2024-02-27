@@ -96,9 +96,9 @@ CREATE TABLE CMCUser (
 	userID int IDENTITY(1,1) PRIMARY KEY,
 	username nvarchar(120) NOT NULL,
 	email varchar(320) NOT NULL,
-	adres nvarchar(120) NOT NULL,
+	adres varchar(6) NOT NULL,
 	country char(2) NOT NULL, -- USE ISO 2 LETTER COUNTRY CODES
-	city nvarchar(100) NOT NULL,
+	houseNumber nvarchar(6) NOT NULL,
 	dateOfBirth date NOT NULL,
 	sex tinyint NOT NULL CONSTRAINT DF_CMCUser_sex DEFAULT 2,
 

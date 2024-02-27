@@ -1,11 +1,10 @@
 package cgroup2.cadmycode.database;
 
-import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.content.Module;
+import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
 
-import javax.swing.text.View;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -457,6 +456,75 @@ public class Database {
         return list;
     }
 
+    /** Returns the average completion of the modules that are part of the course
+     *
+     * @param c the course to get average completion for
+     * @return {@link java.util.Map}<{@link cgroup2.cadmycode.content.Module}, {@link java.lang.Integer}>
+     */
+    public static Map<Module, Integer> getAverageCourseCompletion(Course c) {
+        List<Module> modules = getModulesByCourse(c);
+
+        Map<Module, Integer> map = new HashMap<>();
+
+        for (Module m : modules) {
+            try {
+                PreparedStatement average = databaseConnection.prepareStatement(
+                    "SELECT AVG(viewed) AS average\n"+
+                    "FROM ViewedItems\n"+
+                    "WHERE contentItemID = ?;"
+                );
+
+                average.setInt(1, m.getContentItemID());
+
+                ResultSet rs = average.executeQuery();
+
+                while (rs.next()) {
+                    map.put(m, rs.getInt("average"));
+                }
+
+            } catch (SQLException e) {
+                SceneManager.showErrorDialog(e.getMessage());
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return map;
+    }
+
+    public static List<Course> getCoursesRelatedTo(Course c) {
+        List<Course> list = new ArrayList<>();
+
+        try {
+           PreparedStatement relatedCourses = databaseConnection.prepareStatement(
+               "SELECT TOP 3 *\n"+
+               "FROM Course\n"+
+               "WHERE subj = ? AND courseName <> ?"
+           );
+
+           relatedCourses.setString(1, c.getSubject());
+           relatedCourses.setString(2, c.getCourseName());
+
+           ResultSet rs = relatedCourses.executeQuery();
+
+           while (rs.next()) {
+               list.add(new Course(
+                   rs.getString("courseName"),
+                   rs.getString("subj"),
+                   rs.getString("introductionText"),
+                   rs.getInt("courseID"),
+                   CourseLevel.fromInt(rs.getInt("courseLevel")),
+                   rs.getInt("certificateID")
+               ));
+           }
+
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+            System.out.println(e.getMessage());
+        }
+
+        return list;
+    }
+
     public static void update(Course c) {
         try {
             PreparedStatement updateCourse = databaseConnection.prepareStatement(
@@ -819,10 +887,6 @@ public class Database {
     // it is instead deleted when a user is deleted
 
     public static List<Graduation> getGraduations() {
-        return getGraduations(0);
-    }
-
-    public static List<Graduation> getGraduations(int offset) {
 
         ArrayList<Graduation> list = new ArrayList<>();
 
@@ -830,12 +894,8 @@ public class Database {
             PreparedStatement getGrads = databaseConnection.prepareStatement(
                 "SELECT *\n"+
                 "FROM Graduation\n"+
-                "ORDER BY graduationID ASC\n"+
-                "OFFSET ? ROWS\n"+
-                "FETCH FIRST 15 ROWS ONLY"
+                "ORDER BY graduationID ASC;"
             );
-
-            getGrads.setInt(1, offset);
 
             ResultSet rs = getGrads.executeQuery();
             while (rs.next()) {
@@ -922,6 +982,32 @@ public class Database {
         return map;
     }
 
+    /**
+     * Gets the amount of graduations of the course
+     * @param c the course
+     * @return the total amount
+     */
+    public static int getTotalGraduationsOfCourse(Course c) {
+        try {
+            PreparedStatement totalGrads = databaseConnection.prepareStatement(
+                "SELECT COUNT(*) as total\n"+
+                "FROM Graduation\n"+
+                "WHERE certificateID = ?"
+            );
+
+            totalGrads.setInt(1, c.getCertificateID());
+
+            ResultSet rs = totalGrads.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            SceneManager.showErrorDialog(e.getMessage());
+        }
+
+        return 0;
+    }
+
     /*
         Enrollment queries
      */
@@ -944,10 +1030,6 @@ public class Database {
     }
 
     public static List<Enrollment> getEnrollments() {
-        return getEnrollments(0);
-    }
-
-    public static List<Enrollment> getEnrollments(int offset) {
 
         ArrayList<Enrollment> list = new ArrayList<>();
 
@@ -955,12 +1037,8 @@ public class Database {
             PreparedStatement getEnrolls = databaseConnection.prepareStatement(
                 "SELECT *\n"+
                 "FROM Enrollment\n"+
-                "ORDER BY enrollmentTime DESC\n"+ // show the latest enrollments first
-                "OFFSET ? ROWS\n"+
-                "FETCH FIRST 15 ROWS ONLY"
+                "ORDER BY enrollmentTime DESC;" // show the latest enrollments first
             );
-
-            getEnrolls.setInt(1, offset);
 
             ResultSet rs = getEnrolls.executeQuery();
             while (rs.next()) {

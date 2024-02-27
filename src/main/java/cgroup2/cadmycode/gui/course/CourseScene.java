@@ -2,21 +2,16 @@ package cgroup2.cadmycode.gui.course;
 
 import cgroup2.cadmycode.content.Course;
 import cgroup2.cadmycode.content.CourseLevel;
-import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneType;
 import cgroup2.cadmycode.gui.SceneWrapper;
-import cgroup2.cadmycode.gui.module.ModuleCreationForm;
-import cgroup2.cadmycode.gui.module.ModuleDeletionPopup;
-import cgroup2.cadmycode.gui.module.ModuleEditForm;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -31,6 +26,7 @@ public class CourseScene extends SceneWrapper {
     private Button edit = new Button("Edit");
     private Button delete = new Button("Delete");
     private Button refresh = new Button("Refresh");
+    private Button stats = new Button("Statistics");
     private TableView<Course> courseTable = new TableView<>();
 
     private TableColumn<Course, String> atributeCourseName = new TableColumn<>("courseName");
@@ -57,8 +53,10 @@ public class CourseScene extends SceneWrapper {
                 atributeCertificateID
         );
         courseTable.setMinWidth(1050);
-        VBox v1 = new VBox(home, create);
-        VBox v2 = new VBox(edit, delete, refresh);
+        VBox v1 = new VBox(home, refresh);
+        VBox v2 = new VBox(create, edit, delete, stats);
+        v2.setSpacing(10);
+
         HBox h1 = new HBox(v1, courseTable, v2);
 
         h1.setPadding(new Insets(10.0));
@@ -69,6 +67,7 @@ public class CourseScene extends SceneWrapper {
         edit.setOnMouseClicked(this::onEditButtonPressed);
         delete.setOnMouseClicked(this::onDeleteButtonPressed);
         home.setOnMouseClicked(this::onHomeButtonPressed);
+        stats.setOnMouseClicked(this::onStatsButtonPressed);
 
         // serialize all the database items and add them to the UI
         loadData(new Event(EventType.ROOT));
@@ -121,6 +120,20 @@ public class CourseScene extends SceneWrapper {
 
     private void onHomeButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);
+    }
+
+    private void onStatsButtonPressed(Event e) {
+        if (courseTable.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(stage);
+
+        new CourseStatisticsView(dialog, courseTable.getSelectionModel().getSelectedItem()).show();
+
+        dialog.show();
     }
 }
 

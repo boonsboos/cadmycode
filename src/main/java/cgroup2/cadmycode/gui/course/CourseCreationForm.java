@@ -65,12 +65,12 @@ public class CourseCreationForm extends SceneWrapper {
         try {
             Database.create(
                 new Course(
-                        courseName.getText(),
-                        subject.getText(),
-                        introductionText.getText().replace("\n", " "),
-                        Integer.parseInt(courseID.getText()),
-                        levelBox.getValue(),
-                        Integer.parseInt(certificateID.getText())
+                    courseName.getText(),
+                    subject.getText(),
+                    introductionText.getText().replace("\n", " "),
+                    Integer.parseInt(courseID.getText()),
+                    levelBox.getValue(),
+                    Integer.parseInt(certificateID.getText())
                 )
             );
         } catch (NumberFormatException e) {

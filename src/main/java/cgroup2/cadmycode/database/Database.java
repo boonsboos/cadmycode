@@ -2,6 +2,7 @@ package cgroup2.cadmycode.database;
 
 import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.content.*;
+import cgroup2.cadmycode.except.FieldValidationException;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
 
@@ -650,7 +651,7 @@ public class Database {
 
             createUser.setString(1, u.getName());
             createUser.setString(2, u.getEmail());
-            createUser.setString(3, u.getAddress());
+            createUser.setString(3, u.getPostCode());
             createUser.setString(4, u.getCountry());
             createUser.setString(5, u.getHouseNumber());
             createUser.setDate(6, convertLocalDateToSQLDate(u.getDateOfBirth()));
@@ -686,7 +687,7 @@ public class Database {
                     Sex.fromInt(rs.getInt("sex"))
                 ));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | FieldValidationException e) {
             SceneManager.showErrorDialog(e.getMessage());
         }
 
@@ -708,7 +709,7 @@ public class Database {
 
             updateUser.setString(1, u.getName());
             updateUser.setString(2, u.getEmail());
-            updateUser.setString(3, u.getAddress());
+            updateUser.setString(3, u.getPostCode());
             updateUser.setString(4, u.getCountry());
             updateUser.setString(5, u.getHouseNumber());
             updateUser.setInt(6, u.getSex().asInt());

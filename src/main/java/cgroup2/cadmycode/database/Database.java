@@ -2,6 +2,7 @@ package cgroup2.cadmycode.database;
 
 import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.content.*;
+import cgroup2.cadmycode.except.FieldValidationException;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
 
@@ -13,25 +14,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** de API van deze klasse is static.
- * een instance maken is niet nodig.
- * je kan dus gewoon Database.getUserByID ofzo doen.
+/**
+ * The database class provides a low level abstraction to access the database.
+ * Since all its methods are static, creating an instance is not necessary.
+ *
+ * Do note that all methods that do not explicitly throw an exception, will do nothing if an exception occurs.
+ * E.g. a failing insert will show the error to the user and then silently return.
+ * If a select fails, it will return an empty list.
  */
 public class Database {
 
     private static Connection databaseConnection;
 
+    /**
+     * Stores a database connection to use it for future queries.
+     * @param conn the connection to use
+     */
     public static void connect(Connection conn) {
         databaseConnection = conn;
     }
 
+    /**
+     * Attempts to close the database connection gracefully.
+     * @throws SQLException if something went wrong.
+     */
     public static void disconnect() throws SQLException {
         if (databaseConnection == null) return;
         databaseConnection.close();
     }
 
-    // gebruik alsjeblieft voor alle query methods Connection#prepareStatement() !
+    // if you are adding a new query method, please use Connection#prepareStatement() !
 
+    /**
+     * Converts a {@link LocalDate} to {@link Date}
+     * @param local the date to convert
+     * @return the date in SQL format
+     */
     private static Date convertLocalDateToSQLDate(LocalDate local) {
         return new Date(
                 local.getYear() - 1900,
@@ -44,6 +62,12 @@ public class Database {
         Webcast queries
      */
 
+    /**
+     * Gets the content ID of a webcast by its title
+     * @param title the title of the webcast
+     * @return the content ID of the website
+     * @throws SQLException if something goes wrong on the RDBMS side
+     */
     public static int getWebcastContentIdByTitle(String title) throws SQLException {
         PreparedStatement s = databaseConnection.prepareStatement(
                 "SELECT contentItemID\n"+
@@ -61,6 +85,10 @@ public class Database {
         return -1;
     }
 
+    /**
+     * Saves a new webcast in the database
+     * @param w the webcast to save
+     */
     public static void create(Webcast w) {
         try {
             PreparedStatement insertInContent = databaseConnection.prepareStatement(
@@ -102,11 +130,11 @@ public class Database {
         }
     }
 
+    /**
+     * Get a list of all webcasts
+     * @return {@link List}&lt;{@link Webcast}&gt; containing all webcasts
+     */
     public static List<Webcast> getWebcasts() {
-        return getWebcasts(0);
-    }
-
-    public static List<Webcast> getWebcasts(int offset) {
 
         ArrayList<Webcast> list = new ArrayList<>();
 
@@ -115,12 +143,8 @@ public class Database {
                     "SELECT *\n"+
                     "FROM Webcast\n"+
                     "JOIN Content ON Webcast.contentItemID = Content.contentItemID\n"+
-                    "ORDER BY Webcast.contentItemID ASC\n"+
-                    "OFFSET ? ROWS\n"+
-                    "FETCH NEXT 15 ROWS ONLY;"
+                    "ORDER BY Webcast.contentItemID ASC;"
             );
-
-            selectWebcasts.setInt(1, offset);
 
             ResultSet rs = selectWebcasts.executeQuery();
 
@@ -145,6 +169,10 @@ public class Database {
         return list;
     }
 
+    /**
+     * Deletes the provided webcast from the database
+     * @param w the webcast to delete
+     */
     public static void delete(Webcast w) {
         try {
             PreparedStatement deleteWebcast = databaseConnection.prepareStatement(
@@ -159,6 +187,10 @@ public class Database {
         }
     }
 
+    /**
+     * Updates the webcast in the database with the new data
+     * @param w the webcast to update
+     */
     public static void update(Webcast w) {
         try {
             int id = getWebcastContentIdByTitle(w.getTitle());
@@ -204,6 +236,10 @@ public class Database {
         Module queries
      */
 
+    /**
+     * Get all modules from the database
+     * @return {@link List}&lt;{@link Module}&gt;
+     */
     public static List<Module> getModules() {
 
         ArrayList<Module> list = new ArrayList<>();
@@ -239,6 +275,11 @@ public class Database {
         return list;
     }
 
+    /**
+     * Get a list of modules that are in the provided course.
+     * @param course the course to get the modules of.
+     * @return {@link List}&lt;{@link Module}&gt;
+     */
     public static List<Module> getModulesByCourse(Course course) {
         ArrayList<Module> list = new ArrayList<>();
 
@@ -276,6 +317,12 @@ public class Database {
         return list;
     }
 
+    /**
+     * Gets the module content item ID by title
+     * @param title the title of the module
+     * @return the content item ID of the module
+     * @throws SQLException
+     */
     public static int getModuleContentIdByTitle(String title) throws SQLException {
         PreparedStatement s = databaseConnection.prepareStatement(
             "SELECT contentItemID\n"+
@@ -293,6 +340,10 @@ public class Database {
         return -1;
     }
 
+    /**
+     * Saves a new module in the database
+     * @param m the module to save
+     */
     public static void create(Module m) {
         try {
             PreparedStatement insertInContent = databaseConnection.prepareStatement(
@@ -336,6 +387,10 @@ public class Database {
         }
     }
 
+    /**
+     * Update the provided module in the database
+     * @param m the module to update
+     */
     public static void update(Module m) {
 
         System.out.println(m);
@@ -376,6 +431,10 @@ public class Database {
         }
     }
 
+    /**
+     * Deletes a module from the database
+     * @param m the module to delete
+     */
     public static void delete(Module m) {
         try {
             PreparedStatement deleteModule = databaseConnection.prepareStatement(
@@ -394,6 +453,10 @@ public class Database {
         Course queries
      */
 
+    /**
+     * Saves a new course to the database
+     * @param c the course to save
+     */
     public static void create(Course c) {
         try {
             PreparedStatement insertInCourse = databaseConnection.prepareStatement(
@@ -424,6 +487,10 @@ public class Database {
         }
     }
 
+    /**
+     * Get a list of all courses
+     * @return {@link List}&lt;{@link Course}&gt;
+     */
     public static List<Course> getCourses() {
 
         ArrayList<Course> list = new ArrayList<>();
@@ -457,7 +524,6 @@ public class Database {
     }
 
     /** Returns the average completion of the modules that are part of the course
-     *
      * @param c the course to get average completion for
      * @return {@link java.util.Map}<{@link cgroup2.cadmycode.content.Module}, {@link java.lang.Integer}>
      */
@@ -491,6 +557,11 @@ public class Database {
         return map;
     }
 
+    /**
+     * Returns a list of courses related to the provided course
+     * @param c the course to get the related courses of
+     * @return {@link List}&lt;{@link Course}&gt;
+     */
     public static List<Course> getCoursesRelatedTo(Course c) {
         List<Course> list = new ArrayList<>();
 
@@ -525,6 +596,10 @@ public class Database {
         return list;
     }
 
+    /**
+     * Updates a course in the database
+     * @param c the course to update
+     */
     public static void update(Course c) {
         try {
             PreparedStatement updateCourse = databaseConnection.prepareStatement(
@@ -549,6 +624,10 @@ public class Database {
         }
     }
 
+    /**
+     * Deletes a course from the database
+     * @param c the course to delete
+     */
     public static void delete(Course c) {
         try {
             PreparedStatement deleteCourse = databaseConnection.prepareStatement(
@@ -567,6 +646,10 @@ public class Database {
         Certificate queries
      */
 
+    /**
+     * Saves a new certificate to the database
+     * @param c the certificate to save
+     */
     public static void create(Certificate c) {
         try {
             PreparedStatement createCertificate = databaseConnection.prepareStatement(
@@ -581,6 +664,10 @@ public class Database {
         }
     }
 
+    /**
+     * Gets a list of all certificates
+     * @return {@link List}&lt;{@link Certificate}&gt;
+     */
     public static List<Certificate> getCertificates() {
 
         ArrayList<Certificate> list = new ArrayList<>();
@@ -607,6 +694,10 @@ public class Database {
         return list;
     }
 
+    /**
+     * Updates a certificate in the database
+     * @param c the certificate to update
+     */
     public static void update(Certificate c) {
         try {
             PreparedStatement updateCert = databaseConnection.prepareStatement(
@@ -623,6 +714,10 @@ public class Database {
         }
     }
 
+    /**
+     * Deletes the provided certificate from the database
+     * @param c the certificate to delete
+     */
     public static void delete(Certificate c) {
         try {
             PreparedStatement deleteCert = databaseConnection.prepareStatement(
@@ -641,6 +736,10 @@ public class Database {
         User queries
      */
 
+    /**
+     * Saves a new user to the database
+     * @param u the user to save
+     */
     public static void create(User u) {
         try {
             PreparedStatement createUser = databaseConnection.prepareStatement(
@@ -661,6 +760,10 @@ public class Database {
         }
     }
 
+    /**
+     * Gets a list of all users
+     * @return {@link List}&lt;{@link User}&gt;
+     */
     public static List<User> getUsers() {
 
         ArrayList<User> list = new ArrayList<>();
@@ -693,6 +796,10 @@ public class Database {
         return list;
     }
 
+    /**
+     * Updates the user in the databsae
+     * @param u the user to update
+     */
     public static void update(User u) {
         try {
             PreparedStatement updateUser = databaseConnection.prepareStatement(
@@ -720,6 +827,10 @@ public class Database {
         }
     }
 
+    /**
+     * Deletes a user from the database
+     * @param u the user to delete
+     */
     public static void delete(User u) {
         try {
             PreparedStatement deleteUser = databaseConnection.prepareStatement(
@@ -742,7 +853,8 @@ public class Database {
      *  <li>(enroll - grad) / enroll * 100%</li>
      *  </ul>
      * @param u the User to get the percentage of
-     * @return {@link:java.util.List} of {@link:java.lang.Double} with size 2.
+     * @return {@link List}&lt;{@link Double}&gt; with size 2.
+     * If the query fails, the list contains [0.0, 0.0]
      */
     public static List<Double> getPercentageOfCompletedCourses(User u) {
         try {
@@ -767,7 +879,7 @@ public class Database {
 
             countGraduations.setInt(1, u.getUserID());
             ResultSet graduationsResult = countGraduations.executeQuery();
-            while (enrollmentsResult.next() && graduationsResult.next()) {
+            if (enrollmentsResult.next() && graduationsResult.next()) {
                 return new ArrayList<>(List.of(
                         (double) graduationsResult.getInt("graduated") / (double) enrollmentsResult.getInt("enrolled") * 100,
                         (double) (enrollmentsResult.getInt("enrolled") - graduationsResult.getInt("graduated")) / (double) enrollmentsResult.getInt("enrolled") * 100
@@ -782,6 +894,12 @@ public class Database {
         return new ArrayList<>(List.of(0.0, 0.0));
     }
 
+    /**
+     * Gets the percentage of total course completion
+     * @return {@link List}&lt;{@link Double}&gt;
+     * of which index 0 is enrolled and graduated, and index 1 is enrolled but not graduated
+     * If the query fails, the list contains [0.0, 0.0]
+     */
     public static List<Double> getPercentageOfCourseCompletion() {
         try {
             PreparedStatement countEnrollments = databaseConnection.prepareStatement(
@@ -797,7 +915,7 @@ public class Database {
             ResultSet enrollmentsResult = countEnrollments.executeQuery();
             ResultSet graduationsResult = countGraduations.executeQuery();
 
-            while (enrollmentsResult.next() && graduationsResult.next()) {
+            if (enrollmentsResult.next() && graduationsResult.next()) {
                 return new ArrayList<>(List.of(
                     (double) graduationsResult.getInt("graduated") / (double) enrollmentsResult.getInt("enrolled") * 100,
                     (double) (enrollmentsResult.getInt("enrolled") - graduationsResult.getInt("graduated")) / (double) enrollmentsResult.getInt("enrolled") * 100
@@ -815,7 +933,7 @@ public class Database {
     /**
      * Performs a query to get the percentage of graduations for a certain sex.
      * @param s the {@link cgroup2.cadmycode.user.Sex} to check for
-     * @return 0 if no enrollments, otherwise the percentage from 0 to 100
+     * @return {@link Double#NEGATIVE_INFINITY} if no enrollments, otherwise the percentage from 0 to 100
      */
     public static double getPercentageOfCourseCompletionBySex(Sex s) {
         try {
@@ -865,6 +983,10 @@ public class Database {
         Graduation queries
      */
 
+    /**
+     * Saves a new graduation to the database
+     * @param g the graduation to save
+     */
     public static void create(Graduation g) {
         try {
             PreparedStatement createGraduation = databaseConnection.prepareStatement(
@@ -886,6 +1008,10 @@ public class Database {
     // Graduation is not updatable nor deletable by the administrator
     // it is instead deleted when a user is deleted
 
+    /**
+     * Gets a list of all graduations
+     * @return {@link List}&lt;{@link Graduation}&gt;
+     */
     public static List<Graduation> getGraduations() {
 
         ArrayList<Graduation> list = new ArrayList<>();
@@ -915,6 +1041,11 @@ public class Database {
         return list;
     }
 
+    /**
+     * Gets a list of the graduations of a user
+     * @param user the user to get the graduations of
+     * @return {@link List}&lt;{@link Graduation}&gt;
+     */
     public static List<Graduation> getGraduationsOfUser(User user) {
 
         ArrayList<Graduation> list = new ArrayList<>();
@@ -947,6 +1078,11 @@ public class Database {
         return list;
     }
 
+    /**
+     * Gets a table of graduations and their certificates of a user
+     * @param user the user to get the data of
+     * @return {@link Map}&lt;{@link Graduation}, {@link Certificate}&gt;
+     */
     public static Map<Graduation, Certificate> getGraduationsOfUserWithCertificate(User user) {
 
         HashMap<Graduation, Certificate> map = new HashMap<>();
@@ -1012,6 +1148,10 @@ public class Database {
         Enrollment queries
      */
 
+    /**
+     * Saves a new enrollment to the database
+     * @param e the enrollment to save
+     */
     public static void create(Enrollment e) {
         try {
             PreparedStatement createEnroll = databaseConnection.prepareStatement(
@@ -1029,6 +1169,10 @@ public class Database {
         }
     }
 
+    /**
+     * Gets a list of all enrollments
+     * @return {@link List}&lt;{@link Enrollment}&gt;
+     */
     public static List<Enrollment> getEnrollments() {
 
         ArrayList<Enrollment> list = new ArrayList<>();
@@ -1056,6 +1200,11 @@ public class Database {
         return list;
     }
 
+    /**
+     * Gets all enrollments of a certain user
+     * @param user the user to get the enrollments of
+     * @return {@link List}&lt;{@link Course}&gt;
+     */
     public static List<Enrollment> getEnrollmentsForUser(User user) {
 
         ArrayList<Enrollment> list = new ArrayList<>();
@@ -1086,12 +1235,16 @@ public class Database {
         return list;
     }
 
-    // Enrollments do not need to be updated or deleted
+    // Enrollments do not need to be updated or deleted manually
 
     /*
         Viewed items queries
      */
 
+    /**
+     * Saves a new {@link ViewedItem} to the database
+     * @param v the item to save
+     */
     public static void create(ViewedItem v) {
         try {
             PreparedStatement createViewed = databaseConnection.prepareStatement(
@@ -1109,6 +1262,10 @@ public class Database {
         }
     }
 
+    /**
+     * Gets a list of all viewed items
+     * @return {@link List}&lt;{@link ViewedItem}&gt;
+     */
     public static List<ViewedItem> getViewedItems() {
 
         ArrayList<ViewedItem> list = new ArrayList<>();
@@ -1189,6 +1346,10 @@ public class Database {
         return list;
     }
 
+    /**
+     * Updates a viewed item in the database
+     * @param v the item to update
+     */
     public static void update(ViewedItem v) {
         try {
             PreparedStatement updateViewed = databaseConnection.prepareStatement(
@@ -1207,6 +1368,10 @@ public class Database {
         }
     }
 
+    /**
+     * Gets the total average percentage of content viewed of all viewed items
+     * @return the percentage
+     */
     public static double getAverageViewPercentage() {
         try {
             PreparedStatement updateViewed = databaseConnection.prepareStatement(
@@ -1227,5 +1392,4 @@ public class Database {
 
     // viewed items do not need to be deleted by the administrator
     // as when a user is deleted, the record cascades.
-
 }

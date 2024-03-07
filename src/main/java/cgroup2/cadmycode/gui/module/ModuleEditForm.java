@@ -84,10 +84,6 @@ public class ModuleEditForm extends SceneWrapper {
 
     private void onSubmit(Event e) {
         try {
-            if (!contactEmail.getText().matches("\\w+@\\w+[.]\\w+")) {
-                throw new FieldValidationException("This is not a valid email address");
-            }
-
             Database.update(
                 new Module(
                     this.id,

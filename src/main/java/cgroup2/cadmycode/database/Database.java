@@ -1,6 +1,7 @@
 package cgroup2.cadmycode.database;
 
 import cgroup2.cadmycode.content.Module;
+import cgroup2.cadmycode.except.FieldValidationException;
 import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.gui.SceneManager;
 import cgroup2.cadmycode.user.*;
@@ -232,7 +233,7 @@ public class Database {
                 ));
             }
 
-        } catch (SQLException e) {
+        } catch (FieldValidationException | SQLException e) {
             SceneManager.showErrorDialog(e.getMessage());
         }
 
@@ -269,7 +270,7 @@ public class Database {
                 ));
             }
 
-        } catch (SQLException e) {
+        } catch (FieldValidationException | SQLException e) {
             SceneManager.showErrorDialog(e.getMessage());
         }
 

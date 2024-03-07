@@ -52,7 +52,7 @@ public class User {
                 String houseNumber,
                 LocalDate dateOfBirth,
                 Sex sex) throws FieldValidationException {
-       if (!(checkPostcode(address))){
+       if (!(validatePostcode(address))){
            throw new FieldValidationException("postcode onjuist ingevoerd");
        };
         this.name = name;
@@ -63,7 +63,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.sex = sex;
     }
-    public static boolean checkPostcode(String postCode) {
+    public static boolean validatePostcode(String postCode) {
         return postCode.matches("[1-9]{1}[0-9]{3}[a-zA-Z]{2}");
     }
     public int getUserID() {

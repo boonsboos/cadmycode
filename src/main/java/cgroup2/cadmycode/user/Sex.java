@@ -9,8 +9,8 @@ public enum Sex {
     UNKNOWN;
 
     /**
-     * gets the sex as an integer
-     * @return an integer corresponding with the sex
+     * gets the sex and returns an integer
+     * @return an integer corresponding with the sex, returns 2 if not found
      */
     public int asInt() {
         switch (this) {

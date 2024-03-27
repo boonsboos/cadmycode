@@ -137,7 +137,7 @@ public class User {
     public String getCountry() {
         return country;
     }
-  
+
     /**
      * gets the houseNumber
      * @return
@@ -193,7 +193,6 @@ public class User {
     public void setCountry(String country) {
         this.country = country;
     }
-
 
     /**
      * sets the house number of the user

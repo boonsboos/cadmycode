@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.course;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.Course;
 import cgroup2.cadmycode.content.CourseLevel;
 import cgroup2.cadmycode.database.Database;
@@ -17,6 +18,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message where a selected {@link Course} can be edited and submitted
+ */
 public class CourseEditForm extends SceneWrapper {
     private TextField courseName = new TextField();
     private TextField subject = new TextField();
@@ -31,6 +35,11 @@ public class CourseEditForm extends SceneWrapper {
 
     Button submit = new Button("Submit");
 
+    /**
+     * creates an instance of an edit popup
+     * @param stage the stage on which the popup is to be drawn
+     * @param selected the selected {@link Course}
+     */
     public CourseEditForm(Stage stage, Course selected) {
         super(stage);
         stage.setTitle("edit course");
@@ -71,6 +80,11 @@ public class CourseEditForm extends SceneWrapper {
 
         this.scene = new Scene(v);
     }
+
+    /**
+     * when triggered will update the selected {@link Course}
+     * @param event represents the button that when clicked will trigger updating the selected {@link Course}
+     */
     private void onSubmit(Event event) {
         try {
             Database.update(

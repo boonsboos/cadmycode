@@ -17,6 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message where a selected {@link Certificate} can be edited and submitted
+ */
 public class CertificateEditForm extends SceneWrapper {
 
     private TextField nameField = new TextField();
@@ -24,6 +27,11 @@ public class CertificateEditForm extends SceneWrapper {
 
     private int id = 0;
 
+    /**
+     * creates an instance of an edit popup
+     * @param stage the stage on which the popup is to be drawn
+     * @param selected the selected {@link Certificate}
+     */
     public CertificateEditForm(Stage stage, Certificate selected) {
         super(stage);
         stage.setTitle("edit certificate");
@@ -50,6 +58,10 @@ public class CertificateEditForm extends SceneWrapper {
         this.id = selected.getCertificateID();
     }
 
+    /**
+     * when triggered will update the selected {@link Certificate}
+     * @param e represents the button that when clicked will trigger updating the selected {@link Certificate}
+     */
     private void onSubmit(Event e) {
         try {
             Database.update(

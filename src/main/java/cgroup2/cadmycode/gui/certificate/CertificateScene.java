@@ -2,6 +2,7 @@ package cgroup2.cadmycode.gui.certificate;
 
 import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.database.Database;
+import cgroup2.cadmycode.gui.DashboardScene;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneType;
 import cgroup2.cadmycode.gui.SceneWrapper;
@@ -19,6 +20,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * shows a list of {@link Certificate} and buttons for creating, deleting and updating selected certificates
+ */
 public class CertificateScene extends SceneWrapper {
     private Button home = new Button("Home");
     private Button create = new Button("Register");
@@ -30,6 +34,10 @@ public class CertificateScene extends SceneWrapper {
     private TableColumn<Certificate, Integer> certificateID = new TableColumn<>("certificateID");
     private TableColumn<Certificate, String> certificateName = new TableColumn<>("certificateName");
 
+    /**
+     * creates an instance of a {@link CertificateScene} scene
+     * @param stage the stage on which the {@link CertificateScene} is to be drawn
+     */
     public CertificateScene(Stage stage) {
         super(stage);
 
@@ -62,12 +70,21 @@ public class CertificateScene extends SceneWrapper {
 
         this.scene = new Scene(hBox);
     }
+
+    /**
+     * loads the certificates from the database to the list of certificates in the {@link CertificateScene}
+     * @param e the event that triggers retrieving data en loading it into the gui
+     */
     public void loadData(Event e) {
         certificateTable.setItems(FXCollections.observableArrayList(
                 Database.getCertificates()
         ));
     }
 
+    /**
+     * creates a popup for creating new certificates
+     * @param e represents the button that when clicked will trigger showing the register popup
+     */
     private void onCreateButtonPressed(Event e) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -78,6 +95,10 @@ public class CertificateScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * creates a popup for editing  selected certificates
+     * @param e represents the button that when clicked will trigger showing the edit popup
+     */
     private void onEditButtonPressed(Event e) {
         if (certificateTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -92,6 +113,10 @@ public class CertificateScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * creates a popup for deleting selected certificates
+     * @param e represents the button that when clicked will trigger showing the deletion popup
+     */
     private void onDeleteButtonPressed(Event e) {
         if (certificateTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -106,6 +131,10 @@ public class CertificateScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * when triggered will return to the {@link DashboardScene}
+     * @param e represents the button that when clicked will trigger returning to the {@link DashboardScene}
+     */
     private void onHomeButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);
     }

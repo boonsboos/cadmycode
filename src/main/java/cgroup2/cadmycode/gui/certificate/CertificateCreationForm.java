@@ -17,11 +17,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message where a new {@link Certificate} can be created
+ */
 public class CertificateCreationForm extends SceneWrapper {
     private TextField nameField = new TextField();
 
     Button submit = new Button("Submit");
 
+    /**
+     * creates an instance of a creation form
+     * @param stage the stage on which the creation popup is to be drawn
+     *
+     */
     public CertificateCreationForm(Stage stage) {
         super(stage);
         stage.setTitle("new certificate");
@@ -46,6 +54,10 @@ public class CertificateCreationForm extends SceneWrapper {
         this.scene = new Scene(v);
     }
 
+    /**
+     * tries inserting a {@link Certificate} into the database when the submit button has been pressed or catches a NumberFormatException
+     * @param event represents the button that when clicked will trigger the {@link Certificate} insertion
+     */
     private void onSubmit(Event event) {
         try {
             Database.create(new Certificate(nameField.getText()));

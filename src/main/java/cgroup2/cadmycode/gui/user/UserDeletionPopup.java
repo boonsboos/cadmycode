@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.user;
 
+import cgroup2.cadmycode.content.Course;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
@@ -17,11 +18,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message to confirm whether you would like to delete the {@link User}
+ */
 public class UserDeletionPopup extends SceneWrapper {
     private User selected;
 
     private Button yesButton = new Button("Yes");
     private Button noButton = new Button("No");
+
+    /**
+     * creates an instance of a deletion popup
+     * @param stage the stage on which the popup is to be drawn
+     * @param selected the selected user
+     */
     public UserDeletionPopup(Stage stage, User selected){
         super(stage);
         this.selected = selected;
@@ -40,6 +50,11 @@ public class UserDeletionPopup extends SceneWrapper {
 
         this.scene = new Scene(v);
     }
+
+    /**
+     * when triggered will delete the selected {@link User}
+     * @param e represents the button that when clicked will trigger deleting the selected {@link User}
+     */
     private void onYesPressed(Event e) {
         Database.delete(selected);
         stage.close();
@@ -48,6 +63,10 @@ public class UserDeletionPopup extends SceneWrapper {
         ((UserScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
     }
 
+    /**
+     * when triggered will close the deletion popup
+     * @param e represents the button that when clicked will trigger the closing of the popup
+     */
     private void onNoPressed(Event e) {
         stage.close();
     }

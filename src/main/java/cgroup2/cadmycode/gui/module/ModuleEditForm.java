@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.module;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.ContentStatus;
 import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.database.Database;
@@ -18,6 +19,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message where a selected {@link Module} can be edited and submitted
+ */
 public class ModuleEditForm extends SceneWrapper {
 
     private TextField titleField = new TextField();
@@ -36,6 +40,11 @@ public class ModuleEditForm extends SceneWrapper {
 
     private int id = 0;
 
+    /**
+     * creates an instance of an edit popup
+     * @param stage the stage on which the popup is to be drawn
+     * @param selected the selected {@link Module}
+     */
     public ModuleEditForm(Stage stage, Module selected) {
         super(stage);
         stage.setTitle("edit module");
@@ -82,6 +91,10 @@ public class ModuleEditForm extends SceneWrapper {
         this.id = selected.getContentItemID();
     }
 
+    /**
+     * when triggered will update the selected {@link Module}
+     * @param e represents the button that when clicked will trigger updating the selected {@link Module}
+     */
     private void onSubmit(Event e) {
         try {
             if (!contactEmail.getText().matches("\\w+@\\w+[.]\\w+")) {

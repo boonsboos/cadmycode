@@ -17,6 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message to confirm whether you would like to delete the {@link Course}
+ */
 public class CourseDeletionPopup extends SceneWrapper {
     private Course selected;
 
@@ -24,10 +27,9 @@ public class CourseDeletionPopup extends SceneWrapper {
     private Button noButton = new Button("No");
 
     /**
-     Shows a pop-up message to confirm whether you would like to delete the Webcast
-
+     * creates an instance of a deletion popup
      @param stage - the stage on which the popup is to be drawn
-     @param selected - the selected webcast
+     @param selected - the selected course
      */
     public CourseDeletionPopup(Stage stage, Course selected) {
         super(stage);
@@ -49,6 +51,10 @@ public class CourseDeletionPopup extends SceneWrapper {
         this.scene = new Scene(v);
     }
 
+    /**
+     * when triggered will delete the selected {@link Course}
+     * @param e represents the button that when clicked will trigger deleting the selected {@link Course}
+     */
     private void onYesPressed(Event e) {
         Database.delete(selected);
         stage.close();
@@ -57,6 +63,10 @@ public class CourseDeletionPopup extends SceneWrapper {
         ((CourseScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
     }
 
+    /**
+     * when triggered will close the deletion popup
+     * @param e represents the button that when clicked will trigger the closing of the popup
+     */
     private void onNoPressed(Event e) {
         stage.close();
     }

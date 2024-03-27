@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.user;
 
+import cgroup2.cadmycode.content.Course;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneManager;
@@ -17,6 +18,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message where a new user can be created
+ */
 public class UserCreationForm extends SceneWrapper {
 
 
@@ -33,6 +37,11 @@ public class UserCreationForm extends SceneWrapper {
     ));
 
     private Button submit = new Button("Submit");
+
+    /**
+     * creates an instance of a creation form
+     * @param stage the stage on which the creation popup is to be drawn
+     */
     public UserCreationForm(Stage stage){
         super(stage);
         stage.setTitle("new user");
@@ -63,6 +72,11 @@ public class UserCreationForm extends SceneWrapper {
 
         this.scene = new Scene(v);
     }
+
+    /**
+     * tries inserting a {@link User} into the database when the submit button has been pressed or catches an Exception e
+     * @param event represents the button that when clicked will trigger the {@link User} insertion
+     */
     private void onSubmit(Event event) {
         // TODO: validation of fields
 

@@ -1,11 +1,15 @@
 package cgroup2.cadmycode.gui.user;
 
 import cgroup2.cadmycode.content.ContentStatus;
+import cgroup2.cadmycode.content.Course;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
+import cgroup2.cadmycode.gui.DashboardScene;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneType;
 import cgroup2.cadmycode.gui.SceneWrapper;
+import cgroup2.cadmycode.gui.course.CourseScene;
+import cgroup2.cadmycode.gui.course.CourseStatisticsView;
 import cgroup2.cadmycode.gui.webcast.WebcastCreationForm;
 import cgroup2.cadmycode.gui.webcast.WebcastDeletionPopup;
 import cgroup2.cadmycode.gui.webcast.WebcastEditForm;
@@ -30,6 +34,9 @@ import java.time.LocalDate;
 
 import javafx.scene.control.Button;
 
+/**
+ * shows a list of {@link User} and buttons for creating, deleting and updating selected users
+ */
 public class UserScene extends SceneWrapper {
     private Button home = new Button("Home");
     private Button create = new Button("Register");
@@ -47,9 +54,13 @@ public class UserScene extends SceneWrapper {
     private TableColumn<User, String> attributeHouseNumber = new TableColumn<>("HouseNumber");
     private TableColumn<User, LocalDate> attributeDateOfBirth = new TableColumn<>("Date of birth");
     private TableColumn<User, Sex> attributeSex = new TableColumn<>("Sex");
+
+    /**
+     * creates an instance of a {@link UserScene} scene
+     * @param stage the stage on which the {@link UserScene} is to be drawn
+     */
     public  UserScene(Stage stage){
         super(stage);
-
         attributeUserId.setCellValueFactory(new PropertyValueFactory<>("UserID"));
         attributeEmail.setCellValueFactory(new PropertyValueFactory<>("Email"));
         attributeName.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -90,11 +101,21 @@ public class UserScene extends SceneWrapper {
 
         this.scene = new Scene(hBox);
     }
+
+    /**
+     * loads the certificates from the database to the list of certificates in the {@link UserScene}
+     * @param e the event that triggers retrieving data en loading it into the gui
+     */
     public void loadData(Event e) {
         userTable.setItems(FXCollections.observableArrayList(
                 Database.getUsers()
         ));
     }
+
+    /**
+     * creates a popup for creating new Users
+     * @param e represents the button that when clicked will trigger showing the register popup
+     */
     private void onCreateButtonPressed(Event e) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -106,6 +127,10 @@ public class UserScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * creates a popup for editing selected users
+     * @param e represents the button that when clicked will trigger showing the edit popup
+     */
     private void onEditButtonPressed(Event e) {
         if (userTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -120,6 +145,10 @@ public class UserScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * creates a popup for deleting selected users
+     * @param e represents the button that when clicked will trigger showing the deletion popup
+     */
     private void onDeleteButtonPressed(Event e) {
         if (userTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -135,10 +164,18 @@ public class UserScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * when triggered will return to the {@link DashboardScene}
+     * @param e represents the button that when clicked will trigger returning to the {@link DashboardScene}
+     */
     private void onHomeButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);
     }
 
+    /**
+     * when triggered will open the {@link UserStatisticsView}
+     * @param e represents the button that when clicked will trigger opening the {@link UserStatisticsView}
+     */
     private void onStatsButtonPressed(Event e) {
         if (userTable.getSelectionModel().getSelectedItem() == null) {
             return;

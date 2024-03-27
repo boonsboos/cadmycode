@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.module;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
@@ -15,6 +16,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message to confirm whether you would like to delete the {@link Module}
+ */
 public class ModuleDeletionPopup extends SceneWrapper {
 
     private Module selected;
@@ -48,6 +52,10 @@ public class ModuleDeletionPopup extends SceneWrapper {
         this.scene = new Scene(v);
     }
 
+    /**
+     * when triggered will delete the selected {@link Module}
+     * @param e represents the button that when clicked will trigger deleting the selected {@link Module}
+     */
     private void onYesPressed(Event e) {
         Database.delete(selected);
         stage.close();
@@ -56,6 +64,10 @@ public class ModuleDeletionPopup extends SceneWrapper {
         ((ModuleScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
     }
 
+    /**
+     * when triggered will close the deletion popup
+     * @param e represents the button that when clicked will trigger the closing of the popup
+     */
     private void onNoPressed(Event e) {
         stage.close();
     }

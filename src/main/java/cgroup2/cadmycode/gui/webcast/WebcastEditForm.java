@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.webcast;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.ContentStatus;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
@@ -19,7 +20,9 @@ import javafx.stage.Stage;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-
+/**
+ * Shows a pop-up message where a selected {@link Webcast} can be edited and submitted
+ */
 public class WebcastEditForm extends SceneWrapper {
 
     private TextField titleField = new TextField();
@@ -39,7 +42,11 @@ public class WebcastEditForm extends SceneWrapper {
     private Button submit = new Button("Submit edits");
 
     private int id = 0;
-
+    /**
+     * creates an instance of an edit popup
+     * @param stage the stage on which the popup is to be drawn
+     * @param selected the selected {@link Webcast}
+     */
     public WebcastEditForm(Stage stage, Webcast selected) {
         super(stage);
         stage.setTitle("edit webcast");
@@ -84,7 +91,10 @@ public class WebcastEditForm extends SceneWrapper {
 
         this.id = selected.getContentItemID();
     }
-
+    /**
+     * when triggered will update the selected {@link Webcast}
+     * @param e represents the button that when clicked will trigger updating the selected {@link Webcast}
+     */
     private void onSubmit(Event e) {
         try {
             Database.update(

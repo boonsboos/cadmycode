@@ -1,12 +1,11 @@
 package cgroup2.cadmycode.gui.webcast;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.ContentStatus;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
-import cgroup2.cadmycode.gui.GuiMain;
-import cgroup2.cadmycode.gui.SceneManager;
-import cgroup2.cadmycode.gui.SceneType;
-import cgroup2.cadmycode.gui.SceneWrapper;
+import cgroup2.cadmycode.gui.*;
+import cgroup2.cadmycode.gui.certificate.CertificateScene;
 import cgroup2.cadmycode.gui.webcast.WebcastCreationForm;
 import cgroup2.cadmycode.gui.webcast.WebcastDeletionPopup;
 import cgroup2.cadmycode.gui.webcast.WebcastEditForm;
@@ -24,6 +23,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * shows a list of {@link Webcast} and buttons for creating, deleting and updating selected certificates
+ */
 public class WebcastScene extends SceneWrapper {
 
     private Button home = new Button("Home");
@@ -41,7 +43,10 @@ public class WebcastScene extends SceneWrapper {
     private TableColumn<Webcast, String> attributeURL = new TableColumn<>("URL");
     private TableColumn<Webcast, String> attributeSpeaker = new TableColumn<>("Speaker");
     private TableColumn<Webcast, String> attributeOrganisation = new TableColumn<>("Organisation");
-
+    /**
+     * creates an instance of a {@link WebcastScene} scene
+     * @param stage the stage on which the {@link WebcastScene} is to be drawn
+     */
     public WebcastScene(Stage stage) {
         super(stage);
 
@@ -87,13 +92,20 @@ public class WebcastScene extends SceneWrapper {
 
         this.scene = new Scene(hBox);
     }
-
+    /**
+     * loads the certificates from the database to the list of webcasts in the {@link Webcast}
+     * @param e the event that triggers retrieving data en loading it into the gui
+     */
     public void loadData(Event e) {
         webcastTable.setItems(FXCollections.observableArrayList(
                 Database.getWebcasts()
         ));
     }
 
+    /**
+     * creates a popup for creating new webcasts
+     * @param e represents the button that when clicked will trigger showing the register popup
+     */
     private void onCreateButtonPressed(Event e) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -104,7 +116,10 @@ public class WebcastScene extends SceneWrapper {
 
         dialog.show();
     }
-
+    /**
+     * creates a popup for editing  selected webcasts
+     * @param e represents the button that when clicked will trigger showing the edit popup
+     */
     private void onEditButtonPressed(Event e) {
         if (webcastTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -119,6 +134,10 @@ public class WebcastScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * creates a popup for deleting selected webcasts
+     * @param e represents the button that when clicked will trigger showing the deletion popup
+     */
     private void onDeleteButtonPressed(Event e) {
         if (webcastTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -133,7 +152,10 @@ public class WebcastScene extends SceneWrapper {
 
         dialog.show();
     }
-
+    /**
+     * when triggered will return to the {@link DashboardScene}
+     * @param e represents the button that when clicked will trigger returning to the {@link DashboardScene}
+     */
     private void onHomeButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);
     }

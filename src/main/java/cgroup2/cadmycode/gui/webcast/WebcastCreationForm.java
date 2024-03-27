@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.webcast;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.ContentStatus;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
@@ -21,6 +22,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message where a new {@link Webcast} can be created
+ */
 public class WebcastCreationForm extends SceneWrapper {
 
     private TextField titleField = new TextField();
@@ -39,6 +43,10 @@ public class WebcastCreationForm extends SceneWrapper {
 
     private Button submit = new Button("Submit");
 
+    /**
+     creates an instance of a creation form
+     * @param stage the stage on which the creation popup is to be drawn
+     */
     public WebcastCreationForm(Stage stage) {
         super(stage);
         stage.setTitle("new webcast");
@@ -73,6 +81,10 @@ public class WebcastCreationForm extends SceneWrapper {
         this.scene = new Scene(v);
     }
 
+    /**+
+     * tries inserting a {@link Webcast} into the database when the submit button has been pressed or catches q MalformedURLException & a NumberFormatException
+     * @param event represents the button that when clicked will trigger the {@link Webcast} insertion
+     */
     private void onSubmit(Event event) {
         try {
             Database.create(

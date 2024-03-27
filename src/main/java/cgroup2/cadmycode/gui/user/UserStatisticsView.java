@@ -6,6 +6,7 @@ import cgroup2.cadmycode.content.EducationalContent;
 import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.SceneWrapper;
+import cgroup2.cadmycode.gui.course.CourseStatisticsView;
 import cgroup2.cadmycode.user.Enrollment;
 import cgroup2.cadmycode.user.Graduation;
 import cgroup2.cadmycode.user.User;
@@ -27,6 +28,9 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * shows the statistics of the selected User
+ */
 public class UserStatisticsView extends SceneWrapper {
 
     private Button close = new Button("Close");
@@ -40,6 +44,11 @@ public class UserStatisticsView extends SceneWrapper {
     private final User selectedUser;
     private HashMap<String, Course> coursesMap = new HashMap<>();
 
+    /**
+     * creates an instance of a {@link UserStatisticsView}
+     * @param stage the stage on which the {@link UserStatisticsView} is to be drawn
+     * @param selected the selected {@link User}
+     */
     public UserStatisticsView(Stage stage, User selected) {
         super(stage);
 
@@ -66,6 +75,9 @@ public class UserStatisticsView extends SceneWrapper {
         );
     }
 
+    /**
+     * populates the {@link UserStatisticsView} with the percentages, completed and incomplete, of all the courses
+     */
     private void populate() {
         // filter enrollments for the user
         gatherCourseEnrollments();
@@ -84,6 +96,9 @@ public class UserStatisticsView extends SceneWrapper {
         graduationsList.setItems(FXCollections.observableList(new ArrayList<>(grads.values())));
     }
 
+    /**
+     * gathers the course enrollments
+     */
     private void gatherCourseEnrollments() {
         for (Course c : Database.getCourses()) {
             coursesMap.put(c.getCourseName(), c);
@@ -103,6 +118,10 @@ public class UserStatisticsView extends SceneWrapper {
         }
     }
 
+    /**
+     * calculates the average progress in percentage
+     * @param courseName the name of the course
+     */
     private void calculateAverageProgress(String courseName) {
 
         // look up all modules with this course ID
@@ -122,6 +141,10 @@ public class UserStatisticsView extends SceneWrapper {
         courseProgress.setItems(FXCollections.observableList(progress));
     }
 
+    /**
+     * closes the {@link UserStatisticsView}
+     * @param e represents the button that when clicked will trigger closing the popup
+     */
     private void onCloseButtonPressed(Event e) {
         this.stage.close();
     }

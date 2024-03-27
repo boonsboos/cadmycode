@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * shows the statistics of a selected Course
+ */
 public class CourseStatisticsView extends SceneWrapper {
 
     private final Button close = new Button("Close");
@@ -31,6 +34,11 @@ public class CourseStatisticsView extends SceneWrapper {
     private final Label amountOfGrads = new Label();
     private final Label gradsLabel = new Label("Total graduations:");
 
+    /**
+     * creates an instance of a {@link CourseStatisticsView}
+     * @param stage the stage on which the {@link CourseStatisticsView} is to be drawn
+     * @param selected the selected {@link Course}
+     */
     public CourseStatisticsView(Stage stage, Course selected) {
         super(stage);
 
@@ -51,6 +59,11 @@ public class CourseStatisticsView extends SceneWrapper {
         this.scene = new Scene(root);
     }
 
+    /**
+     * populates the {@link CourseStatisticsView} with the average course completions
+     * and other related courses
+     * @param c the {@link Course} to be used for populating the {@link CourseStatisticsView}
+     */
     private void populate(Course c) {
         // populate list view
         Map<Module, Integer> averages = Database.getAverageCourseCompletion(c);

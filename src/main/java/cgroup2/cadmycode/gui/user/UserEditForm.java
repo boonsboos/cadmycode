@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.user;
 
+import cgroup2.cadmycode.content.Course;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneManager;
@@ -17,6 +18,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message where a selected {@link User} can be edited and submitted
+ */
 public class UserEditForm extends SceneWrapper {
 
     private TextField nameArea = new TextField();
@@ -35,6 +39,11 @@ public class UserEditForm extends SceneWrapper {
     // the user ID to save
     private int id = 0;
 
+    /**
+     * creates an instance of an edit popup
+     * @param stage the stage on which the popup is to be drawn
+     * @param selected the selected {@link User}
+     */
     public UserEditForm(Stage stage, User selected){
         super(stage);
         stage.setTitle("edit user");
@@ -76,6 +85,11 @@ public class UserEditForm extends SceneWrapper {
 
         this.id = selected.getUserID();
     }
+
+    /**
+     * when triggered will update the selected {@link User}
+     * @param event represents the button that when clicked will trigger updating the selected {@link User}
+     */
     private void onSubmit(Event event) {
         try {
             Database.update(

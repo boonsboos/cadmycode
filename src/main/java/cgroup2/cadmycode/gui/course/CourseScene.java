@@ -1,11 +1,14 @@
 package cgroup2.cadmycode.gui.course;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.Course;
 import cgroup2.cadmycode.content.CourseLevel;
 import cgroup2.cadmycode.database.Database;
+import cgroup2.cadmycode.gui.DashboardScene;
 import cgroup2.cadmycode.gui.GuiMain;
 import cgroup2.cadmycode.gui.SceneType;
 import cgroup2.cadmycode.gui.SceneWrapper;
+import cgroup2.cadmycode.gui.certificate.CertificateScene;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -20,6 +23,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * shows a list of {@link Course} and buttons for creating, deleting and updating selected users
+ */
 public class CourseScene extends SceneWrapper {
     private Button home = new Button("Home");
     private Button create = new Button("Register");
@@ -35,6 +41,11 @@ public class CourseScene extends SceneWrapper {
     private TableColumn<Course, Integer> atributeCourseID = new TableColumn<>("courseID");
     private TableColumn<Course, CourseLevel> atributeLevel = new TableColumn<>("level");
     private TableColumn<Course, Integer> atributeCertificateID = new TableColumn<>("certificateID");
+
+    /**
+     * creates an instance of a {@link CourseScene} scene
+     * @param stage the stage on which the {@link CourseScene} is to be drawn
+     */
     public CourseScene(Stage stage) {
         super(stage);
         atributeCourseName.setCellValueFactory(new PropertyValueFactory<>("courseName"));
@@ -76,12 +87,21 @@ public class CourseScene extends SceneWrapper {
 
         this.scene = new Scene(hBox);
     }
+
+    /**
+     * loads the certificates from the database to the list of certificates in the {@link CourseScene}
+     * @param e the event that triggers retrieving data en loading it into the gui
+     */
     public void loadData(Event e) {
         courseTable.setItems(FXCollections.observableArrayList(
                 Database.getCourses()
         ));
     }
 
+    /**
+     * creates a popup for creating new courses
+     * @param e represents the button that when clicked will trigger showing the register popup
+     */
     private void onCreateButtonPressed(Event e) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -92,6 +112,10 @@ public class CourseScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * creates a popup for editing selected courses
+     * @param e represents the button that when clicked will trigger showing the edit popup
+     */
     private void onEditButtonPressed(Event e) {
         if (courseTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -106,6 +130,10 @@ public class CourseScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * creates a popup for deleting selected courses
+     * @param e represents the button that when clicked will trigger showing the deletion popup
+     */
     private void onDeleteButtonPressed(Event e) {
         if (courseTable.getSelectionModel().getSelectedItem() == null) {
             return;
@@ -120,10 +148,18 @@ public class CourseScene extends SceneWrapper {
         dialog.show();
     }
 
+    /**
+     * when triggered will return to the {@link DashboardScene}
+     * @param e represents the button that when clicked will trigger returning to the {@link DashboardScene}
+     */
     private void onHomeButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.DASHBOARD);
     }
 
+    /**
+     * when triggered will open the {@link CourseStatisticsView}
+     * @param e represents the button that when clicked will trigger opening the {@link CourseStatisticsView}
+     */
     private void onStatsButtonPressed(Event e) {
         if (courseTable.getSelectionModel().getSelectedItem() == null) {
             return;

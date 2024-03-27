@@ -1,5 +1,6 @@
 package cgroup2.cadmycode.gui.webcast;
 
+import cgroup2.cadmycode.content.Certificate;
 import cgroup2.cadmycode.content.Webcast;
 import cgroup2.cadmycode.database.Database;
 import cgroup2.cadmycode.gui.GuiMain;
@@ -15,6 +16,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a pop-up message to confirm whether you would like to delete the {@link Webcast}
+ */
 public class WebcastDeletionPopup extends SceneWrapper {
 
     private Webcast selected;
@@ -23,10 +27,9 @@ public class WebcastDeletionPopup extends SceneWrapper {
     private Button noButton = new Button("No");
 
     /**
-        Shows a pop-up message to confirm whether you would like to delete the Webcast
-
-        @param stage - the stage on which the popup is to be drawn
-        @param selected - the selected webcast
+     * creates an instance of a deletion popup
+     @param stage - the stage on which the popup is to be drawn
+     @param selected - the selected {@link Webcast}
      */
     public WebcastDeletionPopup(Stage stage, Webcast selected) {
         super(stage);
@@ -47,7 +50,10 @@ public class WebcastDeletionPopup extends SceneWrapper {
 
         this.scene = new Scene(v);
     }
-
+    /**
+     * when triggered will delete the selected {@link Webcast}
+     * @param e represents the button that when clicked will trigger deleting the selected {@link Webcast}
+     */
     private void onYesPressed(Event e) {
         Database.delete(selected);
         stage.close();
@@ -56,6 +62,10 @@ public class WebcastDeletionPopup extends SceneWrapper {
         ((WebcastScene) GuiMain.SCENE_MANAGER.getCurrentScene()).loadData(new Event(EventType.ROOT));
     }
 
+    /**
+     * when triggered will close the deletion popup
+     * @param e represents the button that when clicked will trigger the closing of the popup
+     */
     private void onNoPressed(Event e) {
         stage.close();
     }

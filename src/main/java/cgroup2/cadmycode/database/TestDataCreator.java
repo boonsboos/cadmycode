@@ -4,6 +4,11 @@ import cgroup2.cadmycode.content.*;
 import cgroup2.cadmycode.content.Module;
 import cgroup2.cadmycode.except.FieldValidationException;
 import cgroup2.cadmycode.user.*;
+import cgroup2.cadmycode.user.Enrollment;
+import cgroup2.cadmycode.user.Graduation;
+import cgroup2.cadmycode.user.Sex;
+import cgroup2.cadmycode.user.User;
+import cgroup2.cadmycode.user.ViewedItem;
 
 import javax.xml.crypto.Data;
 import java.sql.SQLException;
@@ -30,7 +35,7 @@ public class TestDataCreator {
      * </ol>
      *
      * For this, it uses the classes defined in
-     * {@link cgroup2.cadmycode.content} and {@link cgroup2.cadmycode.user}
+     * {@link cgroup2.cadmycode.content} and {@link cgroup2.cadmycode.test.user}
      */
     public static void generate() {
 
@@ -40,56 +45,65 @@ public class TestDataCreator {
          Content table is inserted into at the same time as module and webcasts
         */
 
-        List<Module> bobenismModules = new ArrayList<>(List.of(
-            new Module(
-                "Bobenism 101 - Introduction", "Introduction to Bobenistic programming - Basic concepts",
-                LocalDate.of(2008, 10, 20), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
-            ),
-            new Module(
-                "Bobenism 101 - Standard library", "Introduction to Bobenistic programming",
-                LocalDate.of(2008, 10, 21), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
-            ),
-            new Module(
-                "Bobenism 101 - Using C from Bobenistic programs", "Introduction to Bobenistic programming",
-                LocalDate.of(2008, 10, 23), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
-            ),
-            new Module(
-                "Bobenism 101 - Writing C bindings for Bobenistic programs", "Introduction to Bobenistic programming",
-                LocalDate.of(2008, 10, 26), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
-            ),
-            new Module(
-                "Bobenism 101 - Levaraging assembly to optimize code paths", "Introduction to Bobenistic programming",
-                LocalDate.of(2008, 11, 1), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
-            )
-        ));
+        List<Module> bobenismModules = new ArrayList<>();
+        try{
+            bobenismModules.addAll(List.of(
+                new Module(
+                    "Bobenism 101 - Introduction", "Introduction to Bobenistic programming - Basic concepts",
+                    LocalDate.of(2008, 10, 20), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
+                ),
+                new Module(
+                    "Bobenism 101 - Standard library", "Introduction to Bobenistic programming",
+                    LocalDate.of(2008, 10, 21), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
+                ),
+                new Module(
+                    "Bobenism 101 - Using C from Bobenistic programs", "Introduction to Bobenistic programming",
+                    LocalDate.of(2008, 10, 23), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
+                ),
+                new Module(
+                    "Bobenism 101 - Writing C bindings for Bobenistic programs", "Introduction to Bobenistic programming",
+                    LocalDate.of(2008, 10, 26), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
+                ),
+                new Module(
+                    "Bobenism 101 - Levaraging assembly to optimize code paths", "Introduction to Bobenistic programming",
+                    LocalDate.of(2008, 11, 1), ContentStatus.ACTIVE, "B. Boben", "bope@bobenism.nl", 1
+                )
+            ));
+        }catch(FieldValidationException e){};
         for (Module m : bobenismModules) {
             Database.create(m);
         }
 
-        List<Module> cModules = new ArrayList<>(List.of(
-            new Module(
-                "The C Programming Language 2.0 - Language basics", "Explaining the C Programming Language",
-                LocalDate.of(1978, 2, 19), ContentStatus.ARCHIVE, "D. Ritchie", "dritchie@bell-labs.com", 2
-            ),
-            new Module(
-                "The C Programming Language 2.0 - Leveraging POSIX", "Using POSIX methods to make a simple command line utility in C",
-                LocalDate.of(1978, 2, 20), ContentStatus.ARCHIVE, "B. Kernighan", "bkernighan@bell-labs.com", 2
-            )
-        ));
+        List<Module> cModules = new ArrayList<>();
+        try{
+            cModules.addAll(List.of(
+                new Module(
+                    "The C Programming Language 2.0 - Language basics", "Explaining the C Programming Language",
+                    LocalDate.of(1978, 2, 19), ContentStatus.ARCHIVE, "D. Ritchie", "dritchie@bell-labs.com", 2
+                ),
+                new Module(
+                    "The C Programming Language 2.0 - Leveraging POSIX", "Using POSIX methods to make a simple command line utility in C",
+                    LocalDate.of(1978, 2, 20), ContentStatus.ARCHIVE, "B. Kernighan", "bkernighan@bell-labs.com", 2
+                )
+            ));
+        }catch(FieldValidationException e){};
         for (Module m : cModules) {
             Database.create(m);
         }
 
-        List<Module> webModules = new ArrayList<>(List.of(
-            new Module(
-                "Basic page with HTML5", "Introductory HTML course.",
-                LocalDate.of(2023, 1, 1), ContentStatus.ACTIVE, "TheNetNinja", "ninja@netninja.com", 5
-            ),
-            new Module(
-                "Writing a todo app with React", "Expanding on HTML5 by writing a todo app using the React library",
-                LocalDate.of(2023, 1, 2), ContentStatus.CONCEPT, "J. Delaney", "jeff@fireship.io", 5
-            )
-        ));
+        List<Module> webModules = new ArrayList<>();
+        try{
+            webModules.addAll(List.of(
+                new Module(
+                    "Basic page with HTML5", "Introductory HTML course.",
+                    LocalDate.of(2023, 1, 1), ContentStatus.ACTIVE, "TheNetNinja", "ninja@netninja.com", 5
+                ),
+                new Module(
+                    "Writing a todo app with React", "Expanding on HTML5 by writing a todo app using the React library",
+                    LocalDate.of(2023, 1, 2), ContentStatus.CONCEPT, "J. Delaney", "jeff@fireship.io", 5
+                )
+            ));
+        }catch(FieldValidationException e){};
         for (Module m : webModules) {
             Database.create(m);
         }

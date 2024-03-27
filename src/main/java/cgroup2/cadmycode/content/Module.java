@@ -1,6 +1,7 @@
 package cgroup2.cadmycode.content;
 
 import java.time.LocalDate;
+import cgroup2.cadmycode.except.FieldValidationException;
 
 /**
  * a course item that a user has to complete
@@ -31,8 +32,11 @@ public class Module extends EducationalContent {
                   String contactEmail,
                   int courseID,
                   int version
-    ) {
+    ) throws FieldValidationException {
         super(contentItemID, title, description, publicationDate, status, version);
+        if (!(validateContactEmail(contactEmail))) {
+            throw new FieldValidationException("This is not a valid email address");
+        }
         this.contactName = contactName;
         this.contactEmail = contactEmail;
         this.courseID = courseID;
@@ -55,8 +59,11 @@ public class Module extends EducationalContent {
                   String contactName,
                   String contactEmail,
                   int version
-    ) {
+    ) throws FieldValidationException {
         super(title, description, publicationDate, status, version);
+        if (!(validateContactEmail(contactEmail))) {
+            throw new FieldValidationException("This is not a valid email address");
+        }
         this.contactName = contactName;
         this.contactEmail = contactEmail;
     }
@@ -80,8 +87,11 @@ public class Module extends EducationalContent {
                   String contactName,
                   String contactEmail,
                   int version
-    ) {
+    )  throws FieldValidationException {
         super(contentItemID, title, description, publicationDate, status, version);
+        if (!(validateContactEmail(contactEmail))) {
+            throw new FieldValidationException("This is not a valid email address");
+        }
         this.contactName = contactName;
         this.contactEmail = contactEmail;
     }
@@ -90,6 +100,10 @@ public class Module extends EducationalContent {
      * gets the contact name
      * @return the contact name
      */
+    public static boolean validateContactEmail(String email) {
+        return email.matches("\\w+@\\w+[.]\\w+");
+    }
+
     public String getContactName() {
         return contactName;
     }

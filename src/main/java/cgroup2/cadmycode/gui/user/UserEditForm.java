@@ -41,7 +41,7 @@ public class UserEditForm extends SceneWrapper {
 
         nameArea.setText(selected.getName());
         emailArea.setText(selected.getEmail());
-        addressArea.setText(selected.getAddress());
+        addressArea.setText(selected.getPostCode());
         countryArea.setText(selected.getCountry());
         houseNumberArea.setText(selected.getHouseNumber());
         dateOfBirthArea.setValue(selected.getDateOfBirth());

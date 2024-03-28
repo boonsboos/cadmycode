@@ -149,7 +149,6 @@ public class CourseEditForm extends SceneWrapper {
     }
     private void onSubmit(Event event) {
         try {
-            // loop through all modules and update to this course with the courseID if it is not already or remove if it is not in the list
             for (Module module : modules) {
                 if(moduleList.getItems().contains(module)) {
                     if(module.getCourseID() != Integer.parseInt(courseID.getText())) {

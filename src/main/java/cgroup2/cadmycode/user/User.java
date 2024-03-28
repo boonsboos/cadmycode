@@ -46,7 +46,7 @@ public class User {
                 LocalDate dateOfBirth,
                 Sex sex
     ) throws FieldValidationException {
-         if (!(checkPostcode(postCode))){
+         if (!(validatePostcode(postCode))){
              throw new FieldValidationException("postcode onjuist ingevoerd");
          }
         this.userID = userID;
@@ -77,7 +77,7 @@ public class User {
                 String houseNumber,
                 LocalDate dateOfBirth,
                 Sex sex) throws FieldValidationException {
-       if (!(checkPostcode(postCode))){
+       if (!(validatePostcode(postCode))){
            throw new FieldValidationException("postcode onjuist ingevoerd");
        };
         this.name = name;
@@ -90,11 +90,11 @@ public class User {
     }
 
     /**
-     * checks if the postCode is correct
-     * @param postCode the postCode to check
+     * validates if the postcode is correct
+     * @param postCode the postCode to valide
      * @return true if valid or false if invalid
      */
-    public static boolean checkPostcode(String postCode) {
+    public static boolean validatePostcode(String postCode) {
         return postCode.matches("[1-9]{1}[0-9]{3}[a-zA-Z]{2}");
     }
 

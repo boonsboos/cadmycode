@@ -414,7 +414,7 @@ public class Database {
             );
 
             updateModule.setString(1, m.getContactName());
-            updateModule.setInt(2, m.getCourseID());
+            updateModule.setObject(2, m.getCourseID() > 0 ? m.getCourseID() : null);
             updateModule.setString(3, m.getContactEmail());
             updateModule.setInt(4, m.getContentItemID());
             updateModule.execute();

@@ -97,13 +97,18 @@ public class Module extends EducationalContent {
     }
 
     /**
-     * gets the contact name
-     * @return the contact name
+     * validates the contact email
+     * @param email the email to validate
+     * @return true if the email is valid, false otherwise
      */
     public static boolean validateContactEmail(String email) {
         return email.matches("\\w+@\\w+[.]\\w+");
     }
 
+    /**
+     * gets the contact name
+     * @return the contact name
+     */
     public String getContactName() {
         return contactName;
     }

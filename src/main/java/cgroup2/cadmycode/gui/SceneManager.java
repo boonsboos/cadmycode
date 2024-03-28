@@ -27,6 +27,10 @@ public class SceneManager {
     private Stage mainStage;
     private SceneType currentScene = splash;
 
+    /**
+     * creates an instance of {@link SceneManager}
+     * @param mainStage the stage on which the {@link SceneManager} is to be drawn
+     */
     public SceneManager(Stage mainStage) {
         this.mainStage = mainStage;
 
@@ -43,15 +47,27 @@ public class SceneManager {
         this.scenes.get(splash).show();
     }
 
+    /**
+     * switches the current scene being displayed to the one specified by the scene parameter.
+     * @param scene the scene to be changed to the scene that is shown to the user
+     */
     public void switchScene(SceneType scene) {
         this.scenes.get(scene).show();
         this.currentScene = scene;
     }
 
+    /**
+     * creates and displays an error popup with a provided error message and close button
+     * @param message the message to be given as parameter for the method call
+     */
     public static void showErrorDialog(String message) {
         new Alert(Alert.AlertType.ERROR, message, ButtonType.CLOSE).show();
     }
 
+    /**
+     * gets the current scene shown in the gui
+     * @return the current scene
+     */
     public SceneWrapper getCurrentScene() {
         return this.scenes.get(currentScene);
     }

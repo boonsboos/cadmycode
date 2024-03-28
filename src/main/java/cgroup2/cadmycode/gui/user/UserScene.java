@@ -56,7 +56,7 @@ public class UserScene extends SceneWrapper {
     private TableColumn<User, Sex> attributeSex = new TableColumn<>("Sex");
 
     /**
-     * creates an instance of a {@link UserScene} scene
+     * creates an instance of a {@link UserScene}
      * @param stage the stage on which the {@link UserScene} is to be drawn
      */
     public  UserScene(Stage stage){

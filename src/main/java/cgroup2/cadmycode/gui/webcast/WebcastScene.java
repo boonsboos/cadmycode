@@ -44,7 +44,7 @@ public class WebcastScene extends SceneWrapper {
     private TableColumn<Webcast, String> attributeSpeaker = new TableColumn<>("Speaker");
     private TableColumn<Webcast, String> attributeOrganisation = new TableColumn<>("Organisation");
     /**
-     * creates an instance of a {@link WebcastScene} scene
+     * creates an instance of a {@link WebcastScene}
      * @param stage the stage on which the {@link WebcastScene} is to be drawn
      */
     public WebcastScene(Stage stage) {

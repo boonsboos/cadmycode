@@ -13,6 +13,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * shows a list of buttons that lead to the other scenes
+ * and shows a table of the average percentage completion of content per sex
+ */
 public class DashboardScene extends SceneWrapper {
 
     private final Button webcast = new Button("Webcast");
@@ -25,6 +29,10 @@ public class DashboardScene extends SceneWrapper {
     private final Label averageViews = new Label();
     private final BarChart<String, Number> graduationsBySex;
 
+    /**
+     * creates an instance of {@link DashboardScene}
+     * @param stage the stage on which the {@link DashboardScene} is to be drawn
+     */
     public DashboardScene(Stage stage) {
         super(stage);
 
@@ -84,25 +92,46 @@ public class DashboardScene extends SceneWrapper {
         this.scene = new Scene(root);
     }
 
+    /**
+     * when triggered will open the {@link cgroup2.cadmycode.gui.webcast.WebcastScene} r
+     * @param e represents the button that when clicked will trigger opening the {@link cgroup2.cadmycode.gui.webcast.WebcastScene}
+     */
     private void onWebcastsButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.WEBCAST);
     }
 
+    /**
+     * when triggered will open the {@link AboutScene} r
+     * @param e represents the button that when clicked will trigger opening the {@link AboutScene}
+     */
     private void onAboutButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.ABOUT);
     }
-
+    /**
+     * when triggered will open the {@link cgroup2.cadmycode.gui.module.ModuleScene} r
+     * @param e represents the button that when clicked will trigger opening the {@link cgroup2.cadmycode.gui.module.ModuleScene}
+     */
     private void onModuleButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.MODULE);
     }
+    /**
+     * when triggered will open the {@link cgroup2.cadmycode.gui.course.CourseScene} r
+     * @param e represents the button that when clicked will trigger opening the {@link cgroup2.cadmycode.gui.course.CourseScene}
+     */
     private void onCourseButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.COURSE);
     }
-
+    /**
+     * when triggered will open the {@link cgroup2.cadmycode.gui.user.UserScene} r
+     * @param e represents the button that when clicked will trigger opening the {@link cgroup2.cadmycode.gui.user.UserScene}
+     */
     private void onUserButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.USER);
     }
-
+    /**
+     * when triggered will open the {@link cgroup2.cadmycode.content.Certificate} r
+     * @param e represents the button that when clicked will trigger opening the {@link cgroup2.cadmycode.content.Certificate}
+     */
     private void onCertificateButtonPressed(Event e) {
         GuiMain.SCENE_MANAGER.switchScene(SceneType.CERTIFICATE);
     }

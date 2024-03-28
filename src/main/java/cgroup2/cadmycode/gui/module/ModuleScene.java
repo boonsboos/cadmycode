@@ -47,7 +47,7 @@ public class ModuleScene extends SceneWrapper {
     private TableColumn<Module, Integer> attributeVersion = new TableColumn<>("Version");
 
     /**
-     * creates an instance of a {@link ModuleScene} scene
+     * creates an instance of a {@link ModuleScene}
      * @param stage the stage on which the {@link ModuleScene} is to be drawn
      */
     public ModuleScene(Stage stage) {

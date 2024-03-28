@@ -35,7 +35,7 @@ public class CertificateScene extends SceneWrapper {
     private TableColumn<Certificate, String> certificateName = new TableColumn<>("certificateName");
 
     /**
-     * creates an instance of a {@link CertificateScene} scene
+     * creates an instance of a {@link CertificateScene}
      * @param stage the stage on which the {@link CertificateScene} is to be drawn
      */
     public CertificateScene(Stage stage) {

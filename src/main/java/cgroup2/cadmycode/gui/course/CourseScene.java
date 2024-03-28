@@ -43,7 +43,7 @@ public class CourseScene extends SceneWrapper {
     private TableColumn<Course, Integer> atributeCertificateID = new TableColumn<>("certificateID");
 
     /**
-     * creates an instance of a {@link CourseScene} scene
+     * creates an instance of a {@link CourseScene}
      * @param stage the stage on which the {@link CourseScene} is to be drawn
      */
     public CourseScene(Stage stage) {

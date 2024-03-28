@@ -10,8 +10,15 @@ import javafx.scene.control.ButtonType;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * the Main class of the application that checks for password entry and tries a database connection
+ * or catches an SQLException and prints a message
+ */
 public class CadMyCode {
-
+    /**
+     * creates an instance of {@link CadMyCode}
+     * @param args an array of strings that stores the command-line arguments
+     */
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("You have to provide your database password as a commandline argument.");
